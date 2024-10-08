@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { IRevenueRepository } from "../repositories/IRevenueRepository";
+import { IRevenueRepository } from "@/modules/revenue/repositories/IRevenueRepository";
 import Types from "@/common/container/types";
 
 @injectable()

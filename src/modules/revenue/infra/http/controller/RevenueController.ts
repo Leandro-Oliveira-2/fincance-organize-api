@@ -1,13 +1,13 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { injectable, inject } from "inversify"; // Adiciona o inject
 import Types from "@/common/container/types"; // Certifique-se de ajustar o caminho conforme necessário
-import { revenueSchema } from "@/modules/revenue/http/validators/createRevenueValidators";
+import { revenueSchema } from "@/modules/revenue/infra/http/validators/createRevenueValidators"; // Certifique-se de ajustar o caminho conforme necessário
 import { ZodError } from "zod";
-import { CreateRevenueService } from "../../services/createRevenueService";
-import { ListRevenueService } from "../../services/ListRevenueService";
-import { UpdateRevenueService } from "../../services/UpdateRevenueService";
+import { CreateRevenueService } from "@/modules/revenue/services/createRevenueService"; // Certifique-se de ajustar o caminho conforme necessário
+import { ListRevenueService } from "@/modules/revenue/services/ListRevenueService"; // Certifique-se de ajustar o caminho conforme necessário
+import { UpdateRevenueService } from "@/modules/revenue/services/UpdateRevenueService"; // Certifique-se de ajustar o caminho conforme necessário
 import AppContainer from '@/common/container';
-import { RevenueDoesNotExist } from "../../errors/RevenueDoesNotExist";
+import { RevenueDoesNotExist } from "@/modules/revenue/errors/RevenueDoesNotExist"; // Certifique-se de ajustar o caminho conforme necessário
 
 @injectable()
 export class RevenueController {

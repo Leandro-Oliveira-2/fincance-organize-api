@@ -1,5 +1,5 @@
 import { routerAuth } from "@/modules/auth/infra/http/routes/AuthRoutes";
-import { routerRevenue } from "@/modules/revenue/http/router/routers";
+import { routerRevenue } from "@/modules/revenue/infra/http/router/routers";
 import { routerUser } from "@/modules/user/http/router/routers";
 import { FastifyInstance } from "fastify";
 

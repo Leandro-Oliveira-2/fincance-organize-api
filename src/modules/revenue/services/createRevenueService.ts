@@ -1,9 +1,9 @@
 import { inject, injectable } from "inversify";
-import { IRevenueRepository } from "../repositories/IRevenueRepository";
-import { IUserRepository } from "../../user/repositories/IUserRepository";
+import { IRevenueRepository } from "@/modules/revenue/repositories/IRevenueRepository";
+import { IUserRepository } from "@/modules/user/repositories/IUserRepository";
 import Types from "@/common/container/types";
 import * as Z from "zod";
-import { revenueSchema } from "../http/validators/createRevenueValidators";
+import { revenueSchema } from "@/modules/revenue/infra/http/validators/createRevenueValidators";
 
 interface IRequest {
   data: Z.infer<typeof revenueSchema>;

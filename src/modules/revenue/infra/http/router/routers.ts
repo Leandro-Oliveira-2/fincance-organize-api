@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify";
 import container from "@/common/container";
 import Types from "@/common/container/types";
-import { RevenueController } from "../controller/RevenueController";
+import { RevenueController } from "@/modules/revenue/infra/http/controller/RevenueController";
 
 export async function routerRevenue(app: FastifyInstance) {
   const revenueController = container.get<RevenueController>(Types.RevenueController);
