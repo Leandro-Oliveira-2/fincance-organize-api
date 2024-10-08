@@ -3,7 +3,7 @@ import Types from "@/common/container/types";
 import { IUserRepository } from "@/modules/user/repositories/IUserRepository";
 import { UserRepository } from "@/modules/user/repositories/UserRepository";
 import { UserController } from "@/modules/user/http/controller/userController";
-import { createUserService } from "@/modules/user/services/createUserService";
+import { CreateUserService } from "@/modules/user/services/createUserService";
 import { UpdateUserService } from "@/modules/user/services/updateUserService";
 import AuthController from "@/modules/auth/infra/http/controllers/AuthController";
 import { ListUserService } from "@/modules/user/services/listUserService";
@@ -20,7 +20,7 @@ const container = new Container();
 
 container.bind<UserController>(Types.UserController).to(UserController);
 container.bind<IUserRepository>(Types.UserRepository).to(UserRepository);
-container.bind<createUserService>(Types.createUserService).to(createUserService);
+container.bind<CreateUserService>(Types.CreateUserService).to(CreateUserService);
 container.bind<UpdateUserService>(Types.UpdateUserService).to(UpdateUserService);
 container.bind(Types.AuthController).toConstantValue(new AuthController());
 container.bind<ListUserService>(Types.ListUserService).to(ListUserService);
