@@ -10,21 +10,31 @@ interface IRequest {
 }
 
 @injectable()
-export class createUserService {
-    @inject(Types.UserRepository) private userRepository!: IUserRepository;
+export class CreateUserService {
+  @inject(Types.UserRepository)
+  private userRepository!: IUserRepository;
 
-  async execute(data: IRequest) {
-    const user = {
-      email: data.data.email.toLowerCase(),
-      name: data.data.name,
-      password: await argon2.hash(data.data.password),
-      birthDate: data.data.birthDate,
-      profession: data.data.profession,
-      salary: data.data.salary,
-      createdAt: data.data.createdAt ?? new Date(),
-      updatedAt: data.data.updatedAt ?? new Date(),
-    };
+  public async execute({ data }: IRequest) {
+    try {
+      // Criar o objeto de usuário, hash da senha com Argon2
+      const user = {
+        email: data.email.toLowerCase(),
+        name: data.name,
+        password: await argon2.hash(data.password),
+        birthDate: data.birthDate,
+        profession: data.profession,
+        salary: data.salary,
+        createdAt: data.createdAt ?? new Date(),
+        updatedAt: data.updatedAt ?? new Date(),
+      };
 
-    return await this.userRepository.create(user);
+      // Chama o repositório para criar o usuário
+      const newUser = await this.userRepository.create(user);
+
+      return newUser;
+    } catch (error) {
+      console.error("Error creating user:", error);
+      throw new Error("An error occurred while creating the user.");
+    }
   }
 }

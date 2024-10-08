@@ -5,7 +5,7 @@ const Types = {
   UserService: Symbol("UserService"),
   UserController: Symbol("UserController"),
   UserRepository: Symbol("UserRepository"),
-  createUserService: Symbol("createUserService"),
+  CreateUserService: Symbol("CreateUserService"),
   UpdateUserService: Symbol("UpdateUserService"),
   AuthController: Symbol("AuthController"),
   ListUserService: Symbol("ListUserService"),

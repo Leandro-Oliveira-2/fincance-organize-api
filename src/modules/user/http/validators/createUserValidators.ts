@@ -1,13 +1,12 @@
 import * as Z from 'zod';
 
 export const userSchema = Z.object({
-    id: Z.number().optional(),
-    email: Z.string().email(),
-    password: Z.string().min(6).max(255),
-    name: Z.string().min(3).max(255),
-    birthDate: Z.string().transform((str) => new Date(str)),
-    profession: Z.string().optional(),
-    salary: Z.number().optional(),
-    createdAt: Z.date().optional(),
-    updatedAt: Z.date().optional(),
+  email: Z.string().email("Invalid email format"),
+  password: Z.string().min(6, "Password must be at least 6 characters"),
+  name: Z.string().min(1, "Name is required"),
+  birthDate: Z.string().transform((str) => new Date(str)), // Transforma string ISO para Date
+  profession: Z.string().optional(),
+  salary: Z.number().positive("Salary must be a positive number").optional(),
+  createdAt: Z.string().transform((str) => new Date(str)), // Transforma string ISO para Date
+  updatedAt: Z.string().transform((str) => new Date(str)), // Transforma string ISO para Date
 });

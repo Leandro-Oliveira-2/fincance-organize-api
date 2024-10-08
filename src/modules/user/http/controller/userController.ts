@@ -1,51 +1,47 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { injectable, inject } from "inversify"; // Adiciona o inject
-import { createUserService } from "../../services/createUserService";
+import { CreateUserService } from "../../services/createUserService";
 import Types from "@/common/container/types"; // Certifique-se de ajustar o caminho conforme necessário
 import { userSchema } from "@/modules/user/http/validators/createUserValidators";
 import { ZodError } from "zod";
 import { UpdateUserService } from "../../services/updateUserService";
 import { UserDoesNotExist } from "../../errors/UserDoesNotExist";
 import { ListUserService } from "../../services/listUserService";
+import AppContainer from "@/common/container";
 
 @injectable()
 export class UserController {
-  constructor( 
-    @inject(Types.createUserService) private createUserService: createUserService, // Injeção de dependência correta
-    @inject(Types.UpdateUserService) private updateUserService: UpdateUserService, // Injeção de dependência correta
-    @inject(Types.ListUserService) private listUserService: ListUserService // Injeção de dependência correta
-  ) {}
 
-  async create(request: FastifyRequest, reply: FastifyReply) {
+  async create(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
+
+    const createService = AppContainer.resolve<CreateUserService>(CreateUserService);
     try {
-      // Valida os dados do usuário
+      // Valida os dados do usuário usando Zod
       const user = userSchema.parse(request.body);
 
-      const response = await this.createUserService.execute({ data: user });
-      return reply
-        .status(201)
-        .send({ message: "Successfully created User", response });
+      // Executa o serviço de criação de usuário
+      const response = await createService.execute({ data: user });
+      return reply.status(201).send({ message: "Successfully created User", data: response });
     } catch (err) {
       if (err instanceof ZodError) {
-        return reply
-          .status(400)
-          .send({ message: "Validation error", issues: err.errors });
+        return reply.status(400).send({ message: "Validation error", issues: err.errors });
       }
-      if (err instanceof Error) {
-        return reply.status(500).send({ message: err.message });
-      }
-      return reply.status(400).send({ message: "Invalid request data" });
+
+      // Log de erro e retorno de mensagem de erro genérico
+      console.error("Error in create user:", (err as Error).message);
+      return reply.status(500).send({ message: "An error occurred while creating the user" });
     }
   }
 
   async update(request: FastifyRequest, reply: FastifyReply) {
+    const updateUserService = AppContainer.resolve<UpdateUserService>(UpdateUserService);
     const dataReq: any = request.body;
     const { id, ...data } = dataReq;
     try {
       console.log("Data:", data);
       console.log("ID:", id);
       console.log("DataReq:", dataReq);
-      await this.updateUserService.execute({ id, data });
+      await updateUserService.execute({ id, data });
       return reply.status(200).send({ message: "Successfully Updated User" });
     } catch (error) {
       console.log("Erro no controlador:", error); // Adicione este log para capturar erros
@@ -56,11 +52,16 @@ export class UserController {
     }
   }
 
-  async list(request: FastifyRequest, reply: FastifyReply) {
-    const users = await this.listUserService.execute();
-    return reply
-        .status(201)
-        .send({ message: "Successfully created User", users });
+  async list(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
+    const listService = AppContainer.resolve<ListUserService>(ListUserService);
+    try {
+      // Executa o serviço de listagem de usuários
+      const users = await listService.execute();
+      return reply.status(200).send({ message: "Successfully retrieved Users", data: users });
+    } catch (error) {
+      console.error("Error retrieving users:", (error as Error).message);
+      return reply.status(500).send({ message: "An error occurred while retrieving users" });
+    }
   }
 
 }
