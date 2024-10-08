@@ -13,6 +13,8 @@ import { CreateRevenueService } from "@/modules/revenue/services/createRevenueSe
 import { ListRevenueService } from "@/modules/revenue/services/ListRevenueService";
 import { FixedExpenseRepository } from "@/modules/fixedExpense/repositories/FixedExpenseRepositorie";
 import { FixedExpenseController } from "@/modules/fixedExpense/infra/controller/fixedExpenseController";
+import { VariableExpenseRepository } from "@/modules/variableExpense/repositorie/variableExpenseRepository";
+import { VariableExpenseController } from "@/modules/variableExpense/infra/http/controller/variableExpenseController";
 
 const container = new Container();
 
@@ -28,4 +30,6 @@ container.bind<CreateRevenueService>(Types.CreateRevenueService).to(CreateRevenu
 container.bind<ListRevenueService>(Types.ListRevenueService).to(ListRevenueService);
 container.bind<FixedExpenseRepository>(Types.FixedExpenseRepository).to(FixedExpenseRepository);
 container.bind<FixedExpenseController>(Types.FixedExpenseController).to(FixedExpenseController);
+container.bind<VariableExpenseRepository>(Types.VariableExpenseRepository).to(VariableExpenseRepository);
+container.bind<VariableExpenseController>(Types.VariableExpenseController).to(VariableExpenseController);
 export default container;

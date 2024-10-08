@@ -1,3 +1,4 @@
+import { VariableExpenseRepository } from "@/modules/variableExpense/repositorie/variableExpenseRepository";
 
 
 const Types = {
@@ -14,6 +15,8 @@ const Types = {
   ListRevenueService: Symbol("ListRevenueService"),
   FixedExpenseRepository: Symbol("FixedExpenseRepository"),
   FixedExpenseController: Symbol("FixedExpenseController"),
+  VariableExpenseRepository: Symbol("VariableExpenseRepository"),
+  VariableExpenseController: Symbol("VariableExpenseController"),
 };
 
 export default Types;

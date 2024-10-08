@@ -5,6 +5,7 @@ import { IUserRepository } from "./IUserRepository";
 
 @injectable()
 export class UserRepository implements IUserRepository {
+  
   async create(data: Prisma.UserCreateInput): Promise<User> {
     return await prisma.user.create({
       data: data,
