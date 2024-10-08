@@ -1,0 +1,29 @@
+# Ignore node_modules folder
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Diretório de builds
+dist/
+build/
+
+# Configurações de ambiente locais
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Diretórios de cache
+.cache/
+.parcel-cache/
+.expo/
+.expo-shared/
+
+# Sistema operacional ou arquivos de IDEs
+.DS_Store
+*.swp
+.vscode/
