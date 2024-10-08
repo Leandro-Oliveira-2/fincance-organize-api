@@ -8,9 +8,11 @@ import { UpdateUserService } from "@/modules/user/services/updateUserService";
 import AuthController from "@/modules/auth/infra/http/controllers/AuthController";
 import { ListUserService } from "@/modules/user/services/listUserService";
 import { RevenueRepository } from "@/modules/revenue/repositories/RevenueRepository";
-import { RevenueController } from "@/modules/revenue/http/controller/RevenueController";
+import { RevenueController } from "@/modules/revenue/infra/http/controller/RevenueController";
 import { CreateRevenueService } from "@/modules/revenue/services/createRevenueService";
 import { ListRevenueService } from "@/modules/revenue/services/ListRevenueService";
+import { FixedExpenseRepository } from "@/modules/fixedExpense/repositories/FixedExpenseRepositorie";
+import { FixedExpenseController } from "@/modules/fixedExpense/infra/controller/fixedExpenseController";
 
 const container = new Container();
 
@@ -24,4 +26,6 @@ container.bind<RevenueRepository>(Types.RevenueRepository).to(RevenueRepository)
 container.bind<RevenueController>(Types.RevenueController).to(RevenueController);
 container.bind<CreateRevenueService>(Types.CreateRevenueService).to(CreateRevenueService);
 container.bind<ListRevenueService>(Types.ListRevenueService).to(ListRevenueService);
+container.bind<FixedExpenseRepository>(Types.FixedExpenseRepository).to(FixedExpenseRepository);
+container.bind<FixedExpenseController>(Types.FixedExpenseController).to(FixedExpenseController);
 export default container;

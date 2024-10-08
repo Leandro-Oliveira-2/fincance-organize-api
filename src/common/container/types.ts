@@ -1,4 +1,4 @@
-import { ListRevenueService } from "@/modules/revenue/services/ListRevenueService";
+
 
 const Types = {
   UserService: Symbol("UserService"),
@@ -12,6 +12,8 @@ const Types = {
   RevenueController: Symbol("RevenueController"),
   CreateRevenueService: Symbol("CreateRevenueService"),
   ListRevenueService: Symbol("ListRevenueService"),
+  FixedExpenseRepository: Symbol("FixedExpenseRepository"),
+  FixedExpenseController: Symbol("FixedExpenseController"),
 };
 
 export default Types;
