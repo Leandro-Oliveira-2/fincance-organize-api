@@ -8,8 +8,11 @@ import AppError from "@/common/errors/AppError";
 import Types from "@/common/container/types";
 
 import LoginValidator from "@/modules/auth/infra/http/validators/UserLoginValidator";
-import IResponse from "@/modules/auth/responses/IUserLoginResponse";
+import IUserLoginResponse from "@/modules/auth/responses/IUserLoginResponse";
 import { IUserRepository } from "@/modules/user/repositories/IUserRepository";
+import { IRevenueRepository } from "@/modules/revenue/repositories/IRevenueRepository";
+import { IFixedExpenseRepository } from "@/modules/fixedExpense/repositories/IFixedExpenseRepositorie";
+import { IVariableExpenseRepository } from "@/modules/variableExpense/repositorie/IvariableExpenseRepository";
 
 interface IRequest {
   data: Z.infer<typeof LoginValidator>;
@@ -18,27 +21,25 @@ interface IRequest {
 @injectable()
 class LoginService {
   @inject(Types.UserRepository) private userRepository!: IUserRepository;
+  @inject(Types.RevenueRepository) private revenueRepository!: IRevenueRepository;
+  @inject(Types.FixedExpenseRepository) private fixedExpenseRepository!: IFixedExpenseRepository;
+  @inject(Types.VariableExpenseRepository) private variableExpenseRepository!: IVariableExpenseRepository;
 
-  public async execute({ data }: IRequest): Promise<IResponse> {
-    // Busca o usuário pelo email usando o repositório Prisma
+  public async execute({ data }: IRequest): Promise<IUserLoginResponse> {
     const user = await this.userRepository.findByEmail(data.email.toLowerCase());
-
-    // Verifica se o usuário foi encontrado
+  
     if (!user) {
       throw new AppError("User not found", 404);
     }
-
-    // Verifica a senha usando argon2
+  
     if (user.password && !(await argon2.verify(user.password, data.password))) {
       throw new AppError("Password incorrect", 401);
     }
-
-    // Gera o token de acesso
+  
     const accessToken = jwt.sign({ userId: user.id }, SecurityConfig.jwt.key, {
       expiresIn: SecurityConfig.jwt.exp,
     });
-
-    // Gera o token de refresh
+  
     const refreshToken = jwt.sign(
       { userId: user.id },
       SecurityConfig.jwt.keyRefresh,
@@ -46,8 +47,12 @@ class LoginService {
         expiresIn: SecurityConfig.jwt.refreshExp,
       }
     );
-
-    // Retorna os dados e os tokens
+  
+    // Ajustar para garantir que os resultados sejam sempre arrays
+    const revenues = await this.revenueRepository.findById(user.id);
+    const fixedExpenses = await this.fixedExpenseRepository.findById(user.id);
+    const variableExpenses = await this.variableExpenseRepository.findById(user.id);
+  
     return {
       accessToken,
       accessTokenExpireIn: SecurityConfig.jwt.exp,
@@ -62,9 +67,14 @@ class LoginService {
         salary: user.salary,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
+        revenues: Array.isArray(revenues) ? revenues : revenues ? [revenues] : [], 
+        fixedExpenses: Array.isArray(fixedExpenses) ? fixedExpenses : fixedExpenses ? [fixedExpenses] : [], 
+        variableExpenses: Array.isArray(variableExpenses) ? variableExpenses : variableExpenses ? [variableExpenses] : [], 
       },
     };
   }
+  
+  
 }
 
 export default LoginService;
