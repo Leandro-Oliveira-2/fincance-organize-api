@@ -4,8 +4,8 @@ import Types from "@/common/container/types";
 import * as Z from "zod";
 import { fixedExpenseSchema } from "@/modules/fixedExpense/infra/validators/createFixedExpenseValidator";
 import { IFixedExpenseRepository } from "../repositories/IFixedExpenseRepositorie";
-import { NotFoundError } from "@/common/errors/NotFoundError"; // Crie ou importe erros personalizado
-import { ValidationError } from "@/common/errors/ValidationError"; // Crie ou importe erros personalizado
+import { NotFoundError } from "@/common/errors/NotFoundError";
+import { ValidationError } from "@/common/errors/ValidationError";
 
 interface IRequest {
   data: Z.infer<typeof fixedExpenseSchema>;

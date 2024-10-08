@@ -11,40 +11,42 @@ import { RevenueDoesNotExist } from "@/modules/revenue/errors/RevenueDoesNotExis
 
 @injectable()
 export class RevenueController {
-  constructor(
-    @inject(Types.CreateRevenueService)
-    private createRevenueService: CreateRevenueService,
-    @inject(Types.ListRevenueService) private listRevenueService: ListRevenueService
-  ) {}
 
-  async create(request: FastifyRequest, reply: FastifyReply) {
+  async create(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
+    const createRevenueService = AppContainer.resolve<CreateRevenueService>(CreateRevenueService);
+
     try {
-      // Valida os dados do usuário
-      const user = revenueSchema.parse(request.body);
+      // Valida os dados da receita com Zod
+      const revenueData = revenueSchema.parse(request.body);
 
-      const response = await this.createRevenueService.execute({ data: user });
-      return reply
-        .status(201)
-        .send({ message: "Successfully created Revenue", response });
+      // Chama o serviço de criação de receita
+      const response = await createRevenueService.execute({ data: revenueData });
+
+      return reply.status(201).send({ message: "Successfully created Revenue", data: response });
     } catch (err) {
       if (err instanceof ZodError) {
-        return reply
-          .status(400)
-          .send({ message: "Validation error", issues: err.errors });
+        return reply.status(400).send({ message: "Validation error", issues: err.errors });
       }
-      if (err instanceof Error) {
-        return reply.status(500).send({ message: err.message });
-      }
-      return reply.status(400).send({ message: "Invalid request data" });
+
+      // Log de erro e retorno de mensagem de erro genérico
+      console.error("Error in create revenue:", (err as Error).message);
+      return reply.status(500).send({ message: "An error occurred while creating revenue" });
     }
   }
 
-  async list(request: FastifyRequest, reply: FastifyReply) {
-    const users = await this.listRevenueService.execute();
-    return reply
-        .status(201)
-        .send({ message: "Successfully created User", users });
+  async list(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
+    const listRevenueService = AppContainer.resolve<ListRevenueService>(ListRevenueService);
+    try {
+      const revenues = await listRevenueService.execute();
+
+      return reply.status(200).send({ message: "Successfully retrieved Revenues", data: revenues });
+    } catch (err) {
+      // Log de erro e retorno de mensagem de erro genérico
+      console.error("Error in list revenues:", (err as Error).message);
+      return reply.status(500).send({ message: "An error occurred while retrieving revenues" });
+    }
   }
+
 
   async update(request: FastifyRequest, reply: FastifyReply) {
     const dataReq: any = request.body;

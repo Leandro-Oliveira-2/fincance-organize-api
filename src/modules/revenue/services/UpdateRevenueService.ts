@@ -1,7 +1,7 @@
 import Types from "@/common/container/types";
 import { inject, injectable } from "inversify";
 import * as Z from "zod";
-import { revenueSchema } from "@/modules/revenue/infra/http/validators/createRevenueValidators";
+import { revenueSchema } from "@/modules/revenue//infra/http/validators/createRevenueValidators";
 import { IRevenueRepository } from "../repositories/IRevenueRepository";
 import { RevenueDoesNotExist } from "../errors/RevenueDoesNotExist";
 
