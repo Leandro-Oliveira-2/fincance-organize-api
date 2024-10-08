@@ -26,6 +26,12 @@ export class RevenueRepository implements IRevenueRepository {
     });
   }
 
+  async findAllByUserId(userId: number): Promise<Revenue[] | []> {
+    return await prisma.revenue.findMany({
+      where: { userId },
+    });
+  }
+
   async getRevenues(): Promise<Revenue[] | []> {
     return await prisma.revenue.findMany();
   }

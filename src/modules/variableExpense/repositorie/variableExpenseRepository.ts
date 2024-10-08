@@ -24,6 +24,12 @@ export class VariableExpenseRepository implements IVariableExpenseRepository {
         })
     }
 
+    async findAllByUserId(userId: number): Promise<VariableExpense[] | []> {
+        return await prisma.variableExpense.findMany({
+            where: { userId },
+        });
+    }
+
     async getVariableExpenses(): Promise<VariableExpense[] | []> {
         return await prisma.variableExpense.findMany();
     }

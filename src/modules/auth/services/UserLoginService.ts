@@ -49,9 +49,9 @@ class LoginService {
     );
   
     // Ajustar para garantir que os resultados sejam sempre arrays
-    const revenues = await this.revenueRepository.findById(user.id);
-    const fixedExpenses = await this.fixedExpenseRepository.findById(user.id);
-    const variableExpenses = await this.variableExpenseRepository.findById(user.id);
+    const revenues = await this.revenueRepository.findAllByUserId(user.id);
+    const fixedExpenses = await this.fixedExpenseRepository.findAllByUserId(user.id);
+    const variableExpenses = await this.variableExpenseRepository.findAllByUserId(user.id);
   
     return {
       accessToken,
