@@ -27,6 +27,12 @@ export class FixedExpenseRepository implements IFixedExpenseRepository {
        })
     }
 
+    async findAllByUserId(userId: number): Promise<FixedExpense[] | []> {
+       return await prisma.fixedExpense.findMany({
+            where: {userId}
+       })
+    }
+    
     async getFixedExpenses(): Promise<FixedExpense[] | []> {
       return await prisma.fixedExpense.findMany()
     }
