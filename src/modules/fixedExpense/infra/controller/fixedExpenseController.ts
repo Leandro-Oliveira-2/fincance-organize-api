@@ -12,24 +12,26 @@ import { ListFixedExpenseService } from "../../services/listFixedExpenseService"
 @injectable()
 export class FixedExpenseController {
 
-  async create(request: FastifyRequest, reply: FastifyReply) {
-    const createService = AppContainer.resolve<CreateFixedExpenseService>(CreateFixedExpenseService);
-    try {
-      // Valida os dados do usuário
-      const fixedExpense = fixedExpenseSchema.parse(request.body);
+async create(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
 
-      const response = await createService.execute({ data: fixedExpense });
-         return reply.status(201).send({ message: "Successfully created Fixed Expense", response });
-    } catch (err) {
-      if (err instanceof ZodError) {
-        return reply.status(400).send({ message: "Validation error", issues: err.errors });
-      }
-      if (err instanceof Error) {
-        return reply.status(500).send({ message: err.message });
-      }
-      return reply.status(400).send({ message: "Invalid request data" });
+
+    const createService = AppContainer.resolve<CreateFixedExpenseService>(CreateFixedExpenseService);
+
+        try {
+            // Valida os dados do corpo da requisição usando o Zod
+            const fixedExpense = fixedExpenseSchema.parse(request.body);
+
+            // Executa o serviço de criação de despesa fixa
+            const response = await createService.execute({ data: fixedExpense });
+
+            return reply.status(201).send({ message: "Fixed Expense created successfully", data: response });
+        } catch (err) {
+            if (err instanceof ZodError) {
+            return reply.status(400).send({ message: "Validation error", issues: err.errors });
+            }
+            return reply.status(500).send({ message: "An error occurred while creating Fixed Expense", error: (err as Error).message });
+        }
     }
-  }
 
   async update(request: FastifyRequest, reply: FastifyReply) {
     const dataReq: any = request.body;
@@ -48,12 +50,17 @@ export class FixedExpenseController {
   }
 
   
-  async list(request: FastifyRequest, reply: FastifyReply) {
-    const listFixedExpense = AppContainer.resolve<ListFixedExpenseService>(ListFixedExpenseService);
-    const users = await listFixedExpense.execute();
-    return reply
-        .status(201)
-        .send({ message: "Successfully created User", users });
+  async list(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
+    const listService = AppContainer.resolve<ListFixedExpenseService>(ListFixedExpenseService);
+
+    try {
+      // Executa o serviço de listagem de despesas fixas
+      const users = await listService.execute();
+
+      return reply.status(200).send({ message: "Fixed Expenses retrieved successfully", data: users });
+    } catch (err) {
+      return reply.status(500).send({ message: "An error occurred while retrieving Fixed Expenses", error: (err as Error).message });
+    }
   }
 
 }
