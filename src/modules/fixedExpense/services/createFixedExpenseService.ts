@@ -13,11 +13,8 @@ interface IRequest {
 
 @injectable()
 export class CreateFixedExpenseService {
-  @inject(Types.FixedExpenseRepository)
-  private fixedExpenseRepository!: IFixedExpenseRepository;
-
-  @inject(Types.UserRepository)
-  private userRepository!: IUserRepository;
+  @inject(Types.FixedExpenseRepository)private fixedExpenseRepository!: IFixedExpenseRepository;
+  @inject(Types.UserRepository)private userRepository!: IUserRepository;
 
   async execute({ data }: IRequest) {
     try {
