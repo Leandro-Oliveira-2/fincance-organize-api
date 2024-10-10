@@ -15,6 +15,8 @@ import { FixedExpenseRepository } from "@/modules/fixedExpense/repositories/Fixe
 import { FixedExpenseController } from "@/modules/fixedExpense/infra/controller/fixedExpenseController";
 import { VariableExpenseRepository } from "@/modules/variableExpense/repositorie/variableExpenseRepository";
 import { VariableExpenseController } from "@/modules/variableExpense/infra/http/controller/variableExpenseController";
+import { FinanceController } from "@/modules/finance/infra/controllers/FincanceController";
+import { FinanceRepository } from "@/modules/finance/repositories/FinanceRepository";
 
 const container = new Container();
 
@@ -32,4 +34,6 @@ container.bind<FixedExpenseRepository>(Types.FixedExpenseRepository).to(FixedExp
 container.bind<FixedExpenseController>(Types.FixedExpenseController).to(FixedExpenseController);
 container.bind<VariableExpenseRepository>(Types.VariableExpenseRepository).to(VariableExpenseRepository);
 container.bind<VariableExpenseController>(Types.VariableExpenseController).to(VariableExpenseController);
+container.bind<FinanceController>(Types.FinanceController).to(FinanceController);
+container.bind<FinanceRepository>(Types.FinanceRepository).to(FinanceRepository);
 export default container;

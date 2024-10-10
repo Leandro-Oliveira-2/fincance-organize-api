@@ -17,6 +17,8 @@ const Types = {
   FixedExpenseController: Symbol("FixedExpenseController"),
   VariableExpenseRepository: Symbol("VariableExpenseRepository"),
   VariableExpenseController: Symbol("VariableExpenseController"),
+  FinanceRepository: Symbol("FinanceRepository"),
+  FinanceController: Symbol("FinanceController"),
 };
 
 export default Types;
