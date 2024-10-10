@@ -77,22 +77,33 @@ export class FinanceRepository implements IFinanceRepository {
                     where: {
                         year,
                         ...(month !== undefined ? { month } : {}),
-                        ...(day !== undefined ? { createdAt: { gte: new Date(year, month! - 1, day), lt: new Date(year, month! - 1, day + 1) } } : {})
+                        ...(day !== undefined ? {
+                            createdAt: {
+                                gte: new Date(year, month! - 1, day!),  // Início do dia
+                                lt: new Date(year, month! - 1, day! + 1)  // Final do dia
+                            }
+                        } : {})
                     }
                 },
                 variableExpenses: {
                     where: {
                         year,
                         ...(month !== undefined ? { month } : {}),
-                        ...(day !== undefined ? { createdAt: { gte: new Date(year, month! - 1, day), lt: new Date(year, month! - 1, day + 1) } } : {})
+                        ...(day !== undefined ? {
+                            createdAt: {
+                                gte: new Date(year, month! - 1, day!),  // Início do dia
+                                lt: new Date(year, month! - 1, day! + 1)  // Final do dia
+                            }
+                        } : {})
                     }
                 }
             }
         });
-
+    
         return { user, fixedExpenses: user?.fixedExpenses || [], variableExpenses: user?.variableExpenses || [] };
     }
-
+    
+    
     // Novo Método para buscar despesas fixas e variáveis dentro de um período
     async getUserExpensesByPeriod(userId: number, startDate: Date, endDate: Date): Promise<{ user: User | null, fixedExpenses: FixedExpense[], variableExpenses: VariableExpense[] }> {
         const user = await prisma.user.findUnique({

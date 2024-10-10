@@ -4,18 +4,18 @@ import { IFinanceRepository } from "../repositories/IFinanceRepository";
 import { IResponse } from "../responses/GetExpensesByPeriodResponse";
 
 interface IRequest {
-    userId: string;
-    startDate: Date;
-    endDate: Date;
+    userId: number;
+    year: number;  // Deixar obrigatório
+    month?: number;
+    day?: number;
 }
 
-
 @injectable()
-export class GetExpensesByPeriodService {
+export class GetUserExpensesByDateService {
     @inject(Types.FinanceRepository) private financeRepository!: IFinanceRepository;
 
-    async execute({ userId, startDate, endDate }: IRequest): Promise<IResponse> {
-        const data = await this.financeRepository.getUserExpensesByPeriod(Number(userId), startDate, endDate);
+    async execute({ userId, year, month, day }: IRequest): Promise<IResponse> {
+        const data = await this.financeRepository.getUserExpensesByDate(userId, year, month, day);
 
         if (!data.user) {
             throw new Error("User not found");
@@ -27,7 +27,7 @@ export class GetExpensesByPeriodService {
                 name: data.user.name,
                 email: data.user.email,
                 salary: data.user.salary ?? 0,
-                profession: data.user.profession?? '',
+                profession: data.user.profession ?? '',
                 createdAt: data.user.createdAt,
                 updatedAt: data.user.updatedAt,
             },
