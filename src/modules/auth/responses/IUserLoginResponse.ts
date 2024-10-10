@@ -16,8 +16,6 @@ interface IUserLoginResponse {
     createdAt: Date;
     updatedAt: Date;
     revenues: Revenue[];
-    fixedExpenses: FixedExpense[];
-    variableExpenses: VariableExpense[];
   };
 }
 

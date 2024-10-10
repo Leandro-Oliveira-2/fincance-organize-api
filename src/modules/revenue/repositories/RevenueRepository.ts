@@ -27,10 +27,34 @@ export class RevenueRepository implements IRevenueRepository {
   }
 
   async findAllByUserId(userId: number): Promise<Revenue[] | []> {
-    return await prisma.revenue.findMany({
-      where: { userId },
-    });
+    try {
+      return await prisma.revenue.findMany({
+        where: { userId },
+      });
+    } catch (error) {
+      console.error("Error fetching revenues by userId:", error);
+      throw new Error("Failed to fetch revenues for user");
+    }
   }
+
+  async sumAllByUserId(userId: number): Promise<number> {
+    try {
+      const result = await prisma.revenue.aggregate({
+        _sum: {
+          amount: true, // Supondo que "amount" é o campo que armazena o valor da receita
+        },
+        where: {
+          userId: userId, // Somente receitas do usuário específico
+        },
+      });
+
+      return result._sum.amount || 0; // Retorna a soma ou 0 se não houver receitas
+    } catch (error) {
+      console.error("Error summing revenues by userId:", error);
+      throw new Error("Failed to sum revenues for user");
+    }
+  }
+  
 
   async getRevenues(): Promise<Revenue[] | []> {
     return await prisma.revenue.findMany();

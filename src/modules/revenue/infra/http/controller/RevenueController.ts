@@ -8,6 +8,8 @@ import { ListRevenueService } from "@/modules/revenue/services/ListRevenueServic
 import { UpdateRevenueService } from "@/modules/revenue/services/UpdateRevenueService"; // Certifique-se de ajustar o caminho conforme necessário
 import AppContainer from '@/common/container';
 import { RevenueDoesNotExist } from "@/modules/revenue/errors/RevenueDoesNotExist"; // Certifique-se de ajustar o caminho conforme necessário
+import { GetAllByUserIdService } from "@/modules/revenue/services/GetAllByUserIdService";
+import { CalculateRevenueByIdService } from "@/modules/revenue/services/CalculateRevenueByIdService";
 
 @injectable()
 export class RevenueController {
@@ -46,6 +48,37 @@ export class RevenueController {
       return reply.status(500).send({ message: "An error occurred while retrieving revenues" });
     }
   }
+
+  async listByUserId(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
+
+    const user:any = request.body;
+    const { userId } = user;  
+    const listRevenueService = AppContainer.resolve<GetAllByUserIdService>(GetAllByUserIdService);
+    try {
+      const revenues = await listRevenueService.execute({userId});
+
+      return reply.status(200).send({ message: "Successfully retrieved Revenues", data: revenues });
+    } catch (err) {
+      console.error("Error in list revenues:", (err as Error).message);
+      return reply.status(500).send({ message: "An error occurred while retrieving revenues" });
+    }
+  }
+
+  async calculateByUserId(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
+
+    const user:any = request.body;
+    const { userId } = user;  
+    const calculateRevenueService = AppContainer.resolve<CalculateRevenueByIdService>(CalculateRevenueByIdService);
+    try {
+      const revenues = await calculateRevenueService.execute({userId});
+
+      return reply.status(200).send({ message: "Successfully retrieved Revenues", data: revenues });
+    } catch (err) {
+      console.error("Error in list revenues:", (err as Error).message);
+      return reply.status(500).send({ message: "An error occurred while retrieving revenues" });
+    }
+  }
+
 
 
   async update(request: FastifyRequest, reply: FastifyReply) {
