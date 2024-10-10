@@ -3,11 +3,40 @@ import AppContainer from '@/common/container';
 import { GetExpensesByPeriodService } from "../../services/GetExpensesByPeriodService";
 import { GetUserExpensesByDateService } from "../../services/GetUserExpensesByDateService";
 import { GetUserExpensesService } from "../../services/GetUserExpensesService";
-import { CalculateTotalExpensesService } from "../../services/CalculateTotalExpensesService";
+import { CalculateExpensesService } from "../../services/CalculateExpensesService";
 
 @injectable()
 export class FinanceController {
     
+    async calculateExpenses(request: FastifyRequest<{ Body: { userId: number, year: number, startMonth?: number, numberOfMonths?: number, startDate?: string, endDate?: string } }>, reply: FastifyReply): Promise<FastifyReply> {
+        const { userId, year, startMonth, numberOfMonths, startDate, endDate } = request.body;
+
+        const calculateExpensesService = AppContainer.resolve<CalculateExpensesService>(CalculateExpensesService);
+
+        try {
+            const response = await calculateExpensesService.execute({
+                userId,
+                year,
+                startMonth,
+                numberOfMonths,
+                startDate: startDate ? new Date(startDate) : undefined,
+                endDate: endDate ? new Date(endDate) : undefined
+            });
+
+            return reply.status(200).send({
+                status: 'success',
+                data: response,
+            });
+        } catch (error) {
+            console.error('Error calculating expenses:', error);
+            return reply.status(500).send({
+                status: 'error',
+                message: error instanceof Error ? error.message : "Unexpected error occurred",
+            });
+        }
+    }
+
+
     async getExpensesByPeriod(request: FastifyRequest<{ Body: { userId: string; startDate: string; endDate: string; } }>, reply: FastifyReply): Promise<FastifyReply> {
         const { userId, startDate, endDate } = request.body;
 
@@ -76,20 +105,6 @@ export class FinanceController {
         }
     }
 
-    async calculateTotalExpenses(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
-        const { userId, year } = request.body as { userId: number; year: number };
-    
-        const calculateTotalExpensesService = AppContainer.resolve<CalculateTotalExpensesService>(CalculateTotalExpensesService);
-
-        try {        
-            const response = await calculateTotalExpensesService.execute({ userId, year });
-        
-            return reply.status(200).send(response);
-        } catch (error) {        
-            return reply.status(400).send({
-                message: error instanceof Error ? error.message : "Unexpected error occurred"
-            });
-        }
-    }
+   
 
 }
