@@ -1,7 +1,14 @@
 import { VariableExpense, FixedExpense, User } from "@prisma/client";
 
 export interface IFinanceRepository {
-    calculateTotalExpenses(userId: number, year: number): Promise<{ fixed: number, variable: number, total: number }>;
+    calculateExpenses(
+        userId: number,
+        year: number,
+        startMonth?: number,    
+        numberOfMonths?: number,
+        startDate?: Date,       
+        endDate?: Date          
+    ): Promise<{ fixed: number; variable: number; total: number }>;
     getUserExpenses(userId: number): Promise<{
         user: User;
         fixedExpenses: FixedExpense[];
