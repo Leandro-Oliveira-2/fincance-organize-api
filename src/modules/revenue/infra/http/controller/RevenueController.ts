@@ -8,6 +8,12 @@ import { ListRevenueService } from "@/modules/revenue/services/ListRevenueServic
 import { UpdateRevenueService } from "@/modules/revenue/services/UpdateRevenueService"; // Certifique-se de ajustar o caminho conforme necessário
 import AppContainer from '@/common/container';
 import { RevenueDoesNotExist } from "@/modules/revenue/errors/RevenueDoesNotExist"; // Certifique-se de ajustar o caminho conforme necessário
+import { GetAllByUserIdService } from "@/modules/revenue/services/GetAllByUserIdService";
+import { CalculateRevenueByIdService } from "@/modules/revenue/services/CalculateRevenueByIdService";
+
+interface UserRequestBody {
+  userId: number;
+}
 
 @injectable()
 export class RevenueController {
@@ -47,16 +53,47 @@ export class RevenueController {
     }
   }
 
+  async listByUserId(request: FastifyRequest<{ Body: UserRequestBody }>, reply: FastifyReply): Promise<FastifyReply> {
+    const { userId } = request.body;  
+    const listRevenueService = AppContainer.resolve<GetAllByUserIdService>(GetAllByUserIdService);
+
+    try {
+      const revenues = await listRevenueService.execute({ userId });
+  
+      return reply.status(200).send({ message: "Successfully retrieved Revenues", data: revenues });
+    } catch (err) {
+      console.error("Error in list revenues:", (err as Error).message);
+      return reply.status(500).send({ message: "An error occurred while retrieving revenues" });
+    }
+  }
+
+  async calculateByUserId(request: FastifyRequest<{ Body: UserRequestBody }>, reply: FastifyReply): Promise<FastifyReply> {
+  const { userId } = request.body; 
+  const calculateRevenueService = AppContainer.resolve<CalculateRevenueByIdService>(CalculateRevenueByIdService);
+
+  try {
+    const totalRevenue = await calculateRevenueService.execute({ userId });
+    return reply.status(200).send({ message: "Successfully calculated total revenue", data: totalRevenue });
+  } catch (err) {
+    console.error("Error in calculating revenue:", (err as Error).message);
+    return reply.status(500).send({ message: "An error occurred while calculating total revenue" });
+  }
+}
+
+
+
 
   async update(request: FastifyRequest, reply: FastifyReply) {
     const dataReq: any = request.body;
     const updateRevenueService = AppContainer.resolve<UpdateRevenueService>(UpdateRevenueService);
-    const { id, ...data } = dataReq;
+    const { id, ...data } = dataReq; 
+    
     try {
+      
       await updateRevenueService.execute({ id, data });
-      return reply.status(200).send({ message: "Successfully Updated User" });
+      return reply.status(200).send({ message: "Successfully Updated Revenue" });
     } catch (error) {
-      console.log("Erro no controlador:", error); // Adicione este log para capturar erros
+      console.log("Erro no controlador:", error);
       if (error instanceof RevenueDoesNotExist) {
         return reply.status(404).send({ message: error.message });
       }

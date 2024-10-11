@@ -4,8 +4,8 @@ import * as Z from "zod";
 import { userUpdateSchema } from "../http/validators/updateUserValidator";
 import { IUserRepository } from "../repositories/IUserRepository";
 import { UserDoesNotExist } from "../errors/UserDoesNotExist";
-import { ValidationError } from "@/common/errors/ValidationError"; // Supondo que você tenha este erro
-import { InternalServerError } from "@/common/errors/InternalServerError"; // Supondo que você tenha este erro
+import { ValidationError } from "@/common/errors/ValidationError"; 
+import { InternalServerError } from "@/common/errors/InternalServerError"; 
 
 interface IRequest {
   id: number;
@@ -34,12 +34,11 @@ export class UpdateUserService {
 
       // Preparar os dados para atualização
       const updateData = {
-        name: parsedData.data.name,
-        email: parsedData.data.email,
-        birthDate: parsedData.data.birthDate,
-        profession: parsedData.data.profession,
-        salary: parsedData.data.salary,
-        updatedAt: parsedData.data.updatedAt ?? new Date(),
+        name: parsedData.data.name ?? user.name,
+        email: parsedData.data.email ?? user.email,
+        birthDate: parsedData.data.birthDate ?? user.birthDate,
+        profession: parsedData.data.profession ?? user.profession,
+        updatedAt: new Date(), // Atualizado automaticamente com a data atual
       };
 
       // Atualizar o usuário no repositório

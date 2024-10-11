@@ -1,5 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// learn more about it in the docs: https
 
 generator client {
   provider = "prisma-client-js"
@@ -13,51 +13,69 @@ datasource db {
 model User {
   id            Int       @id @default(autoincrement())
   email         String    @unique
-  password      String    // Senha (hash criptografado)
-  name          String    // Nome do usuário
-  birthDate     DateTime? // Data de nascimento
-  profession    String?   // Profissão do usuário
-  salary        Float?    // Salário do usuário
-  createdAt     DateTime  @default(now()) // Data de criação
-  updatedAt     DateTime  @updatedAt      // Atualiza automaticamente na modificação
-  
-  // Relacionamentos
-  revenues         Revenue[]         // Relacionamento com receitas
-  fixedExpenses    FixedExpense[]    // Relacionamento com despesas fixas
-  variableExpenses VariableExpense[] // Relacionamento com despesas variáveis
+  password      String   
+  name          String   
+  birthDate     DateTime?
+  profession    String?  
+  createdAt     DateTime  @default(now()) 
+  updatedAt     DateTime  @updatedAt 
+
+
+  revenues         Revenue[]        
+  fixedExpenses    FixedExpense[]   
+  variableExpenses VariableExpense[] 
+  creditCardBills  CreditCardBill[]
 }
-
-
 
 model Revenue {
   id         Int       @id @default(autoincrement())
   user       User      @relation(fields: [userId], references: [id])
-  userId     Int       // Relacionamento com usuário
-  source     String    // Fonte da receita (ex.: "Salário", "Freelance")
-  amount     Float     // Valor da receita
-  month      Int       // Mês da receita (1 = Janeiro, 12 = Dezembro)
-  year       Int       // Ano da receita
-  createdAt  DateTime  @default(now())  // Data de criação
+  userId     Int      
+  source     String   
+  amount     Float    
+  startDate  DateTime  @default(now())
+  endDate    DateTime?
+  frequency  String    @default("mensal")
+  isPaid     Boolean   @default(false)
+  createdAt  DateTime  @default(now())
 }
+
 
 model FixedExpense {
   id          Int       @id @default(autoincrement())
   user        User      @relation(fields: [userId], references: [id])
-  userId      Int       // Relacionamento com usuário
-  description String    // Descrição do gasto (ex.: "Aluguel")
-  amount      Float     // Valor do gasto fixo
-  month       Int       // Mês do gasto (1 = Janeiro, 12 = Dezembro)
-  year        Int       // Ano do gasto
-  createdAt   DateTime  @default(now())  // Data de criação
+  userId      Int      
+  description String   
+  amount      Float    
+  dueDate     DateTime  @default(now())
+  isPaid      Boolean   @default(false)
+  month       Int      
+  year        Int      
+  createdAt   DateTime  @default(now()) 
 }
 
 model VariableExpense {
+  id                Int       @id @default(autoincrement())
+  user              User      @relation(fields: [userId], references: [id])
+  userId            Int      
+  description       String   
+  amount            Float    
+  paymentMethod     String?  
+  dueDate           DateTime  @default(now())
+  isPaid            Boolean   @default(false)
+  numInstallments   Int?     
+  currentInstallment Int?     @default(1)
+  month             Int      
+  year              Int      
+  createdAt         DateTime  @default(now()) 
+}
+
+model CreditCardBill {
   id          Int       @id @default(autoincrement())
   user        User      @relation(fields: [userId], references: [id])
-  userId      Int       // Relacionamento com usuário
-  description String    // Descrição do gasto (ex.: "Supermercado", "Cinema")
-  amount      Float     // Valor do gasto variável
-  month       Int       // Mês do gasto (1 = Janeiro, 12 = Dezembro)
-  year        Int       // Ano do gasto
-  createdAt   DateTime  @default(now())  // Data de criação
+  userId      Int      
+  totalAmount Float    
+  dueDate     DateTime 
+  isPaid      Boolean   @default(false)
+  createdAt   DateTime  @default(now()) 
 }
