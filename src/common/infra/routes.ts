@@ -1,4 +1,5 @@
 import { routerAuth } from "@/modules/auth/infra/http/routes/AuthRoutes";
+import { routerCreditCard } from "@/modules/CreditCardBill/infra/routes/routes";
 import { routerFiance } from "@/modules/finance/infra/routes/routers";
 import { routerFixedExpense } from "@/modules/fixedExpense/infra/routes/router";
 import { routerRevenue } from "@/modules/revenue/infra/http/router/routers";
@@ -13,4 +14,5 @@ export async function routes(app: FastifyInstance) {
     app.register(routerFixedExpense, { prefix: '/fixed-expense' })
     app.register(routerVariableExpense, { prefix: '/variable-expense' })
     app.register(routerFiance, { prefix: '/finance' })
+    app.register(routerCreditCard, { prefix: '/credit-card' })
 }

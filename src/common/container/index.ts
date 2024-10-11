@@ -17,6 +17,8 @@ import { VariableExpenseRepository } from "@/modules/variableExpense/repositorie
 import { VariableExpenseController } from "@/modules/variableExpense/infra/http/controller/variableExpenseController";
 import { FinanceController } from "@/modules/finance/infra/controllers/FincanceController";
 import { FinanceRepository } from "@/modules/finance/repositories/FinanceRepository";
+import { CreditCardBillRepository } from "@/modules/CreditCardBill/repositories/CreditCardBillRepository";
+import { CreditCardBillController } from "@/modules/CreditCardBill/infra/controllers/creditCartBillController";
 
 const container = new Container();
 
@@ -36,4 +38,7 @@ container.bind<VariableExpenseRepository>(Types.VariableExpenseRepository).to(Va
 container.bind<VariableExpenseController>(Types.VariableExpenseController).to(VariableExpenseController);
 container.bind<FinanceController>(Types.FinanceController).to(FinanceController);
 container.bind<FinanceRepository>(Types.FinanceRepository).to(FinanceRepository);
+container.bind<CreditCardBillRepository>(Types.CreditCardBillRepository).to(CreditCardBillRepository);
+container.bind<CreditCardBillController>(Types.CreditCardBillController).to(CreditCardBillController);
+
 export default container;
