@@ -3,7 +3,6 @@ export interface IResponse {
         id: number;
         name: string;
         email: string;
-        salary?: number;
         profession?: string;
         createdAt: Date;
         updatedAt: Date;

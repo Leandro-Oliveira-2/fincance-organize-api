@@ -58,7 +58,6 @@ class LoginService {
         email: user.email,
         birthDate: user.birthDate,
         profession: user.profession,
-        salary: user.salary,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
         revenues: Array.isArray(revenues) ? revenues : revenues ? [revenues] : [], 

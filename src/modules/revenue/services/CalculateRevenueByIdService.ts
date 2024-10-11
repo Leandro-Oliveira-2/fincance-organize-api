@@ -1,12 +1,11 @@
 import { inject, injectable } from "inversify";
 import { IRevenueRepository } from "@/modules/revenue/repositories/IRevenueRepository";
 import Types from "@/common/container/types";
-import { InternalServerError } from "@/common/errors/InternalServerError"; // Importar erros personalizados, se aplicável
+import { InternalServerError } from "@/common/errors/InternalServerError";
 
 interface IRequest {
-    userId: number;
-  }
-
+  userId: number;
+}
 
 @injectable()
 export class CalculateRevenueByIdService {
@@ -14,23 +13,19 @@ export class CalculateRevenueByIdService {
     @inject(Types.RevenueRepository) private revenueRepository: IRevenueRepository,
   ) {}
 
-
   public async execute({ userId }: IRequest) {
     try {
-      // Busca as receitas do repositório
-      const revenues = await this.revenueRepository.sumAllByUserId(userId);
+      // Soma todas as receitas do usuário
+      const totalRevenue = await this.revenueRepository.sumAllByUserId(userId);
 
-      // Retorna as receitas encontradas
+      // Retorna o total calculado
       return {
-        message: "Revenues retrieved Calculate with successfully",
-        data: revenues,
+        message: "Total revenue calculated successfully",
+        totalRevenue, // Retorna o total de receita
       };
     } catch (error: any) {
-      // Log de erro para facilitar a depuração
-      console.error("Error retrieving revenues:", error.message);
-
-      // Tratamento de erro genérico, pode ser substituído por erro customizado
-      throw new InternalServerError("An error occurred while retrieving revenues.");
+      console.error("Error calculating total revenue:", error.message);
+      throw new InternalServerError("An error occurred while calculating total revenue.");
     }
   }
 }

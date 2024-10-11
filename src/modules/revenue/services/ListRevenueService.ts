@@ -5,26 +5,22 @@ import { InternalServerError } from "@/common/errors/InternalServerError"; // Im
 
 @injectable()
 export class ListRevenueService {
-  constructor(
-    @inject(Types.RevenueRepository) private revenueRepository: IRevenueRepository,
-  ) {}
-
+  @inject(Types.RevenueRepository) private revenueRepository!: IRevenueRepository
+  
   async execute() {
     try {
-      // Busca as receitas do repositório
       const revenues = await this.revenueRepository.getRevenues();
 
-      // Retorna as receitas encontradas
       return {
         message: "Revenues retrieved successfully",
         data: revenues,
       };
     } catch (error: any) {
-      // Log de erro para facilitar a depuração
       console.error("Error retrieving revenues:", error.message);
 
-      // Tratamento de erro genérico, pode ser substituído por erro customizado
-      throw new InternalServerError("An error occurred while retrieving revenues.");
+      throw new InternalServerError(
+        "An error occurred while retrieving revenues."
+      );
     }
   }
 }
