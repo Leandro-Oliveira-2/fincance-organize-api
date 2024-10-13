@@ -17,6 +17,7 @@ model User {
   name          String   
   birthDate     DateTime?
   profession    String?  
+  gender        String    @default("outros")
   createdAt     DateTime  @default(now()) 
   updatedAt     DateTime  @updatedAt 
 

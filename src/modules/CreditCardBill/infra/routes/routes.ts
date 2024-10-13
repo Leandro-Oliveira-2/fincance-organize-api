@@ -8,5 +8,5 @@ export async function routerCreditCard(app: FastifyInstance) {
 
     app.post("/create", creditCardController.create.bind(creditCardController));
     app.patch("/update", creditCardController.update.bind(creditCardController));
-    app.get("/list", creditCardController.list.bind(creditCardController));
+    app.post("/list", creditCardController.list.bind(creditCardController));
 }

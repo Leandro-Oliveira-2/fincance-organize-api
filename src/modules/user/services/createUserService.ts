@@ -21,6 +21,7 @@ export class CreateUserService {
         password: await argon2.hash(data.password),
         birthDate: data.birthDate,
         profession: data.profession,
+        gender: data.gender,
         createdAt: data.createdAt ?? new Date(),
       };
 

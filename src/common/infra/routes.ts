@@ -15,4 +15,8 @@ export async function routes(app: FastifyInstance) {
     app.register(routerVariableExpense, { prefix: '/variable-expense' })
     app.register(routerFiance, { prefix: '/finance' })
     app.register(routerCreditCard, { prefix: '/credit-card' })
+    
+    app.get('/ping', async (request, reply) => {
+        reply.send('pong');
+    });
 }
