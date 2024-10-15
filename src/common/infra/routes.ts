@@ -2,6 +2,7 @@ import { routerAuth } from "@/modules/auth/infra/http/routes/AuthRoutes";
 import { routerCreditCard } from "@/modules/CreditCardBill/infra/routes/routes";
 import { routerFiance } from "@/modules/finance/infra/routes/routers";
 import { routerFixedExpense } from "@/modules/fixedExpense/infra/routes/router";
+import { routerReport } from "@/modules/report/infra/routes/routers";
 import { routerRevenue } from "@/modules/revenue/infra/http/router/routers";
 import { routerUser } from "@/modules/user/http/router/routers";
 import { routerVariableExpense } from "@/modules/variableExpense/infra/http/router/router";
@@ -15,7 +16,8 @@ export async function routes(app: FastifyInstance) {
     app.register(routerVariableExpense, { prefix: '/variable-expense' })
     app.register(routerFiance, { prefix: '/finance' })
     app.register(routerCreditCard, { prefix: '/credit-card' })
-    
+    app.register(routerReport, { prefix: '/report' })
+
     app.get('/ping', async (request, reply) => {
         reply.send('pong');
     });

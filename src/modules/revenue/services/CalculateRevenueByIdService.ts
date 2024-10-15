@@ -17,7 +17,6 @@ export class CalculateRevenueByIdService {
     try {
       // Soma todas as receitas do usuário
       const totalRevenue = await this.revenueRepository.sumAllByUserId(userId);
-
       // Retorna o total calculado
       return {
         total: totalRevenue
