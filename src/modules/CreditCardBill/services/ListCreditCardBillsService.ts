@@ -24,10 +24,7 @@ export class ListCreditCardBillsService {
         bills = await this.creditCardBillRepository.getAllCreditCardBills();
       }
 
-      return {
-        message: "Credit card bills retrieved successfully",
-        data: bills,
-      };
+      return bills;
     } catch (error: any) {
       console.error("Error retrieving credit card bills:", error.message);
       throw new InternalServerError("An error occurred while retrieving credit card bills.");

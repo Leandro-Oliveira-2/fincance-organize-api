@@ -25,6 +25,7 @@ export class CreateCreditCardBillService {
     const creditCardBill = {
       user: { connect: { id: userId } },
       totalAmount,
+      cardProvider: data.cardProvider ?? "",
       dueDate: new Date(dueDate),
       isPaid: isPaid ?? false,
     };

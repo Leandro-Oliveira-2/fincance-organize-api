@@ -32,6 +32,7 @@ export class UpdateCreditCardBillService {
     const updateData = {
       totalAmount: data.totalAmount,
       dueDate: data.dueDate ? new Date(data.dueDate) : undefined,
+      cardProvider: data.cardProvider ?? creditCardBill.cardProvider,
       isPaid: data.isPaid ?? creditCardBill.isPaid,
     };
 

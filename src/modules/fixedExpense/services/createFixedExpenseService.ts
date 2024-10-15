@@ -38,6 +38,7 @@ export class CreateFixedExpenseService {
         amount: data.amount,
         month: data.month,
         year: data.year,
+        category: data.category,
         createdAt: data.createdAt ? new Date(data.createdAt) : new Date(),  // Adicionado valor padrão
       };
 

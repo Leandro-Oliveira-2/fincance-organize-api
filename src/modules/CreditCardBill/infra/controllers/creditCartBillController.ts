@@ -38,11 +38,10 @@ export class CreditCardBillController {
   // Método para listar as faturas de cartão de crédito
   async list(request: FastifyRequest, reply: FastifyReply) {
     const listCreditCardBillsService = AppContainer.resolve<ListCreditCardBillsService>(ListCreditCardBillsService);
-
+    const data:any = request.body;
     try {
       // Obtém o userId do request, se houver
-      const { userId } = request.query as { userId?: number };
-
+      const userId = data.userId;
       // Chama o serviço para listar as faturas de acordo com o userId (ou todas se não houver)
       const bills = await listCreditCardBillsService.execute({ userId });
 

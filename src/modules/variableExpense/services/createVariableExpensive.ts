@@ -32,6 +32,7 @@ export class CreateVariableExpenseService {
       amount: data.amount,
       month: data.month,
       year: data.year,
+      category: data.category,
       createdAt: data.createdAt ? new Date(data.createdAt) : undefined,
     };
 

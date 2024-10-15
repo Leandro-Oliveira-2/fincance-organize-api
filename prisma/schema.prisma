@@ -50,6 +50,7 @@ model FixedExpense {
   amount      Float    
   dueDate     DateTime  @default(now())
   isPaid      Boolean   @default(false)
+  category    String    @default("outros")
   month       Int      
   year        Int      
   createdAt   DateTime  @default(now()) 
@@ -64,6 +65,7 @@ model VariableExpense {
   paymentMethod     String?  
   dueDate           DateTime  @default(now())
   isPaid            Boolean   @default(false)
+  category    String    @default("outros")
   numInstallments   Int?     
   currentInstallment Int?     @default(1)
   month             Int      
@@ -76,7 +78,8 @@ model CreditCardBill {
   user        User      @relation(fields: [userId], references: [id])
   userId      Int      
   totalAmount Float    
-  dueDate     DateTime 
+  dueDate     DateTime
+  cardProvider String   @default("nubank")
   isPaid      Boolean   @default(false)
   createdAt   DateTime  @default(now()) 
 }

@@ -38,6 +38,7 @@ export class UpdateFixedExpenseService {
         description: data.description,
         amount: data.amount,
         month: data.month,
+        category: data.category,
         year: data.year,
       };
 
