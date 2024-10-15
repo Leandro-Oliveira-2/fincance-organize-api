@@ -28,11 +28,17 @@ export class GetUserExpensesService {
                 description: expense.description,
                 amount: expense.amount,
                 createdAt: expense.createdAt,
+                dueDate: expense.dueDate ? expense.dueDate.toISOString() : undefined,
+                isPaid: expense.isPaid,
+                category: expense.category,
             })),
             variableExpenses: data.variableExpenses.map((expense: VariableExpense) => ({
                 description: expense.description,
                 amount: expense.amount,
                 createdAt: expense.createdAt,
+                isPaid: expense.isPaid,
+                category: expense.category,
+                paymentMethod: expense.paymentMethod ?? '',
             })),
         };
 
