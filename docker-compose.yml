@@ -7,25 +7,14 @@ services:
       - "3000:3000"
     volumes:
       - .:/app
-    depends_on:
-      - db
     environment:
       - DATABASE_TYPE=postgres
-      - DATABASE_HOST=db
-      - DATABASE_USER=postgres
-      - DATABASE_PASSWORD=124578pz
-      - DATABASE_DATABASE=railway
-      - DATABASE_PORT=5432
+      - DATABASE_HOST=<REMOTE_DB_HOST>       # Coloque aqui o host do seu banco remoto, ex: "containers-us-west-123.railway.app"
+      - DATABASE_USER=<REMOTE_DB_USER>       # O usuário do banco remoto
+      - DATABASE_PASSWORD=<REMOTE_DB_PASSWORD>  # A senha do banco remoto
+      - DATABASE_DATABASE=<REMOTE_DB_NAME>   # O nome do banco de dados
+      - DATABASE_PORT=<REMOTE_DB_PORT>       # A porta do banco remoto, geralmente 5432
       - DATABASE_LOGGING=false
       - DATABASE_SSL=true
       - PORT=3000
     command: npm run start
-
-  db:
-    image: postgres:latest
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 124578pz
-      POSTGRES_DB: railway
-    ports:
-      - "5432:5432"
