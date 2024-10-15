@@ -19,6 +19,7 @@ import { FinanceController } from "@/modules/finance/infra/controllers/FincanceC
 import { FinanceRepository } from "@/modules/finance/repositories/FinanceRepository";
 import { CreditCardBillRepository } from "@/modules/CreditCardBill/repositories/CreditCardBillRepository";
 import { CreditCardBillController } from "@/modules/CreditCardBill/infra/controllers/creditCartBillController";
+import { ReportController } from "@/modules/report/infra/controllers/ReportController";
 
 const container = new Container();
 
@@ -40,5 +41,5 @@ container.bind<FinanceController>(Types.FinanceController).to(FinanceController)
 container.bind<FinanceRepository>(Types.FinanceRepository).to(FinanceRepository);
 container.bind<CreditCardBillRepository>(Types.CreditCardBillRepository).to(CreditCardBillRepository);
 container.bind<CreditCardBillController>(Types.CreditCardBillController).to(CreditCardBillController);
-
+container.bind<ReportController>(Types.ReportController).to(ReportController);
 export default container;

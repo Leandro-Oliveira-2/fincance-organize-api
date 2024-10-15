@@ -22,6 +22,7 @@ export class UserRepository implements IUserRepository {
   async findById(id: number): Promise<User | null> {
     return await prisma.user.findUnique({
       where: { id },
+      include: { revenues: true },  // Incluindo receitas
     });
   }
   

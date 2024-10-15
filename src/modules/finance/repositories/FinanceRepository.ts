@@ -3,6 +3,7 @@ import {
   FixedExpense,
   VariableExpense,
   User,
+  Revenue,
 } from "@prisma/client";
 import { injectable } from "inversify";
 import { IFinanceRepository } from "./IFinanceRepository";
@@ -11,8 +12,6 @@ const prisma = new PrismaClient();
 
 @injectable()
 export class FinanceRepository implements IFinanceRepository {
-
-  
   /* Calcular o saldo anterior */
   async calculatePreviousBalance(
     userId: number,
@@ -319,14 +318,18 @@ export class FinanceRepository implements IFinanceRepository {
   async projectExpensesForYear(
     userId: number,
     monthsToProject: number // Projeção apenas para meses futuros
-  ): Promise<{ projectedFixed: number[], projectedVariable: number[], projectedTotal: number[] }> {
+  ): Promise<{
+    projectedFixed: number[];
+    projectedVariable: number[];
+    projectedTotal: number[];
+  }> {
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth() + 1; // Mês atual (de 1 a 12)
-    const currentYear = currentDate.getFullYear();   // Ano atual
-  
+    const currentYear = currentDate.getFullYear(); // Ano atual
+
     let totalFixed = 0;
     let totalVariable = 0;
-  
+
     // Step 1: Buscar as despesas de Janeiro até o mês atual (passado)
     for (let i = 1; i <= currentMonth; i++) {
       const fixedExpenses = await prisma.fixedExpense.aggregate({
@@ -337,7 +340,7 @@ export class FinanceRepository implements IFinanceRepository {
         },
         _sum: { amount: true },
       });
-  
+
       const variableExpenses = await prisma.variableExpense.aggregate({
         where: {
           userId,
@@ -346,33 +349,32 @@ export class FinanceRepository implements IFinanceRepository {
         },
         _sum: { amount: true },
       });
-  
+
       // Acumula os valores para calcular a média
       totalFixed += fixedExpenses._sum.amount || 0;
       totalVariable += variableExpenses._sum.amount || 0;
     }
-  
+
     // Step 2: Calcular a média das despesas até o mês atual
     const avgFixed = totalFixed / currentMonth;
     const avgVariable = totalVariable / currentMonth;
     const avgTotal = avgFixed + avgVariable;
-  
+
     // Step 3: Projeção dos próximos meses (do mês atual até o final do ano)
     const projectedFixed = [];
     const projectedVariable = [];
     const projectedTotal = [];
-  
+
     const remainingMonths = 12 - currentMonth; // Meses restantes no ano
-  
+
     for (let j = 0; j < remainingMonths; j++) {
       projectedFixed.push(avgFixed);
       projectedVariable.push(avgVariable);
       projectedTotal.push(avgTotal);
     }
-  
+
     return { projectedFixed, projectedVariable, projectedTotal };
-  }  
-  
+  }
 
   // Novo Método para buscar despesas fixas e variáveis dentro de um período
   async getUserExpensesByPeriod(
@@ -383,6 +385,7 @@ export class FinanceRepository implements IFinanceRepository {
     user: User | null;
     fixedExpenses: FixedExpense[];
     variableExpenses: VariableExpense[];
+    revenues: Revenue[]; // Adiciona as receitas ao retorno
   }> {
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -390,16 +393,24 @@ export class FinanceRepository implements IFinanceRepository {
         fixedExpenses: {
           where: {
             createdAt: {
-              gte: startDate, // Data de início recebida da requisição
-              lte: endDate, // Data de fim recebida da requisição
+              gte: startDate,
+              lte: endDate,
             },
           },
         },
         variableExpenses: {
           where: {
             createdAt: {
-              gte: startDate, // Data de início recebida da requisição
-              lte: endDate, // Data de fim recebida da requisição
+              gte: startDate,
+              lte: endDate,
+            },
+          },
+        },
+        revenues: {
+          where: {
+            startDate: {
+              gte: startDate,
+              lte: endDate,
             },
           },
         },
@@ -410,6 +421,7 @@ export class FinanceRepository implements IFinanceRepository {
       user,
       fixedExpenses: user?.fixedExpenses || [],
       variableExpenses: user?.variableExpenses || [],
+      revenues: user?.revenues || [], // Retorna as receitas também
     };
   }
 }

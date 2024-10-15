@@ -21,6 +21,7 @@ const Types = {
   FinanceController: Symbol("FinanceController"),
   CreditCardBillRepository: Symbol("CreditCardBillRepository"),
   CreditCardBillController: Symbol("CreditCardBillController"),
+  ReportController: Symbol("ReportController"),
 };
 
 export default Types;
