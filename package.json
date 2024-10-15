@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "start": "node --experimental-specifier-resolution=node build/server.js",
     "dev": "tsx watch ./src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -39,6 +40,7 @@
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.7.4",
     "@types/pdfkit": "^0.13.5",
-    "@types/stream-buffers": "^3.0.7"
+    "@types/stream-buffers": "^3.0.7",
+    "tsx": "^3.14.0"
   }
 }
