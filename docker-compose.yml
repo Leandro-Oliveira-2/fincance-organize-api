@@ -9,7 +9,6 @@ services:
       - .:/app
     depends_on:
       - db
-      - rabbitmq
     environment:
       - DATABASE_TYPE=postgres
       - DATABASE_HOST=db
