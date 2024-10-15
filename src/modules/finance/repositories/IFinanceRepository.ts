@@ -1,4 +1,4 @@
-import { VariableExpense, FixedExpense, User } from "@prisma/client";
+import { VariableExpense, FixedExpense, User, Revenue } from "@prisma/client";
 
 export interface IFinanceRepository {
     calculateExpenses(
@@ -15,5 +15,8 @@ export interface IFinanceRepository {
         variableExpenses: VariableExpense[];
     }>;
     getUserExpensesByDate(userId: number, year: number, month?: number, day?: number): Promise<{ user: User | null, fixedExpenses: FixedExpense[], variableExpenses: VariableExpense[] }>;
-    getUserExpensesByPeriod(userId: number, startDate: Date, endDate: Date): Promise<{ user: User | null, fixedExpenses: FixedExpense[], variableExpenses: VariableExpense[] }>;
+    getUserExpensesByPeriod(userId: number, startDate: Date, endDate: Date): Promise<{ user: User | null, fixedExpenses: FixedExpense[], variableExpenses: VariableExpense[], revenues: Revenue[] }>;
+    calculatePreviousBalance(userId: number, month: number, year: number): Promise<number>
+    calculateCurrentBalance(userId: number, month: number, year: number): Promise<number>
+    projectExpensesForYear(userId: number,monthsToProject: number): Promise<{projectedFixed: number[], projectedVariable: number[], projectedTotal: number[]}>
 }

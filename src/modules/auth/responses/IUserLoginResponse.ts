@@ -12,12 +12,9 @@ interface IUserLoginResponse {
     email: string;
     birthDate: Date | null;
     profession: string | null;
-    salary: number | null;
     createdAt: Date;
     updatedAt: Date;
     revenues: Revenue[];
-    fixedExpenses: FixedExpense[];
-    variableExpenses: VariableExpense[];
   };
 }
 

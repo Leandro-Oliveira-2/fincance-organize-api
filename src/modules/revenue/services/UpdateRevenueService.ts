@@ -1,7 +1,7 @@
 import Types from "@/common/container/types";
 import { inject, injectable } from "inversify";
 import * as Z from "zod";
-import { revenueSchema } from "@/modules/revenue//infra/http/validators/createRevenueValidators";
+import { revenueSchema } from "@/modules/revenue//infra/http/validators/updateRevenueValidator";
 import { IRevenueRepository } from "../repositories/IRevenueRepository";
 import { RevenueDoesNotExist } from "../errors/RevenueDoesNotExist";
 
@@ -16,6 +16,8 @@ export class UpdateRevenueService {
 
   public async execute({ id, data }: IRequest) {
     console.log(`Updating revenue with ID: ${id}`);
+    
+    // Verificar se a receita existe
     const revenue = await this.revenueRepository.findById(id);
     console.log(`Revenue found: ${revenue !== null}`);
 
@@ -23,13 +25,13 @@ export class UpdateRevenueService {
       throw new RevenueDoesNotExist("Revenue does not exist");
     }
 
-    const updateData: any = {
-      source: data.source,
+    // Preparar os dados para atualização
+    const updateData = {
+      source: data.source,  // Alterado de 'description' para 'source'
       amount: data.amount,
-      month: data.month,
-      year: data.year,
     };
 
+    // Atualizar a receita
     return await this.revenueRepository.updateRevenue(id, updateData);
   }
 }

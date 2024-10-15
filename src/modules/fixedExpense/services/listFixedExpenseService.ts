@@ -12,6 +12,14 @@ export class ListFixedExpenseService {
     try {
       const fixedExpenses = await this.fixedExpenseRepository.getFixedExpenses();
       
+      // Verificar se existem despesas fixas
+      if (fixedExpenses.length === 0) {
+        return {
+          message: "No fixed expenses found",
+          data: [],
+        };
+      }
+
       // Retorna uma resposta estruturada com sucesso
       return {
         message: "Fixed expenses retrieved successfully",

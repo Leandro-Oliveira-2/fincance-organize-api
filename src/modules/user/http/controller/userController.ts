@@ -38,9 +38,6 @@ export class UserController {
     const dataReq: any = request.body;
     const { id, ...data } = dataReq;
     try {
-      console.log("Data:", data);
-      console.log("ID:", id);
-      console.log("DataReq:", dataReq);
       await updateUserService.execute({ id, data });
       return reply.status(200).send({ message: "Successfully Updated User" });
     } catch (error) {

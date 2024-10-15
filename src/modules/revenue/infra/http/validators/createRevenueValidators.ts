@@ -5,6 +5,8 @@ export const revenueSchema = Z.object({
     userId: Z.number(),
     source: Z.string(),
     amount: Z.number(),
-    month: Z.number().min(1).max(12),
-    year: Z.number()
+    startDate: Z.string(),
+    endDate: Z.string().optional(),
+    frequency: Z.enum(["mensal", "semanal", "anual"]).optional(),
+    isPaid: Z.boolean().optional(),
 });

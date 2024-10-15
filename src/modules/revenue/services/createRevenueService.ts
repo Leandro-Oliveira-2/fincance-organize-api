@@ -19,42 +19,49 @@ export class CreateRevenueService {
 
   public async execute({ data }: IRequest) {
     try {
-      // Validação dos dados usando o schema Zod
+      console.log("Validando dados...");
       const parsedData = revenueSchema.safeParse(data);
       if (!parsedData.success) {
+        console.error("Erro na validação dos dados:", parsedData.error.errors);
         throw new ValidationError("Invalid data format", parsedData.error.errors);
       }
 
-      // Verificar se o usuário existe
-      console.log(`Checking if user with ID ${data.userId} exists`);
+      console.log("Verificando se o usuário existe...");
       const userExists = await this.userRepository.findById(data.userId);
       if (!userExists) {
+        console.error("Usuário não encontrado:", data.userId);
         throw new NotFoundError("User not found");
       }
 
-      // Criar a receita
+      
+      const startDate = new Date(data.startDate);
+      const month = startDate.getMonth() + 1;
+      const year = startDate.getFullYear();
+
+      console.log("Criando receita...");
       const revenue = {
         user: { connect: { id: data.userId } },
         source: data.source,
         amount: data.amount,
-        month: data.month,
-        year: data.year,
-      };
+        startDate: data.startDate, 
+        endDate: data.endDate ?? new Date(year, 11, 31), 
+        frequency: data.frequency ?? "mensal", 
+        isPaid: data.isPaid ?? false,
+    };
 
-      // Persistir a receita no banco de dados
+      console.log("Persistindo receita no banco de dados...");
       const newRevenue = await this.revenueRepository.create(revenue);
 
-      // Retornar a receita criada
+      console.log("Receita criada com sucesso:", newRevenue);
       return {
         message: "Revenue created successfully",
         revenue: newRevenue,
       };
 
     } catch (error: any) {
-      console.error("Error creating revenue:", error.message);
-
+      console.error("Erro ao criar receita:", error.message);
       if (error instanceof ValidationError || error instanceof NotFoundError) {
-        throw error; // Lança o erro específico para ser capturado pelo controlador
+        throw error;
       }
 
       throw new Error("An unexpected error occurred while creating revenue.");

@@ -26,7 +26,6 @@ export class GetUserExpensesByDateService {
                 id: data.user.id,
                 name: data.user.name,
                 email: data.user.email,
-                salary: data.user.salary ?? 0,
                 profession: data.user.profession ?? '',
                 createdAt: data.user.createdAt,
                 updatedAt: data.user.updatedAt,
@@ -35,11 +34,16 @@ export class GetUserExpensesByDateService {
                 description: expense.description,
                 amount: expense.amount,
                 createdAt: expense.createdAt,
+                isPaid: expense.isPaid,
+                category: expense.category,
             })),
             variableExpenses: data.variableExpenses.map(expense => ({
                 description: expense.description,
                 amount: expense.amount,
                 createdAt: expense.createdAt,
+                paymentMethod: expense.paymentMethod ?? '',
+                isPaid: expense.isPaid,
+                category: expense.category,
             })),
         };
 

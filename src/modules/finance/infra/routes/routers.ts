@@ -10,4 +10,5 @@ export async function routerFiance(app: FastifyInstance) {
   app.post("/list-by-date", financeController.getExpensesByDate.bind(financeController));
   app.post("/list-by-expenses", financeController.getUserExpenses.bind(financeController));
   app.post("/calculate-by-period", financeController.calculateExpenses.bind(financeController));
+  app.post("/project-expenses", financeController.projectExpenses.bind(financeController));
 }

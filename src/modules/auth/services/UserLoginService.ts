@@ -11,8 +11,6 @@ import LoginValidator from "@/modules/auth/infra/http/validators/UserLoginValida
 import IUserLoginResponse from "@/modules/auth/responses/IUserLoginResponse";
 import { IUserRepository } from "@/modules/user/repositories/IUserRepository";
 import { IRevenueRepository } from "@/modules/revenue/repositories/IRevenueRepository";
-import { IFixedExpenseRepository } from "@/modules/fixedExpense/repositories/IFixedExpenseRepositorie";
-import { IVariableExpenseRepository } from "@/modules/variableExpense/repositorie/IvariableExpenseRepository";
 
 interface IRequest {
   data: Z.infer<typeof LoginValidator>;
@@ -22,8 +20,6 @@ interface IRequest {
 class LoginService {
   @inject(Types.UserRepository) private userRepository!: IUserRepository;
   @inject(Types.RevenueRepository) private revenueRepository!: IRevenueRepository;
-  @inject(Types.FixedExpenseRepository) private fixedExpenseRepository!: IFixedExpenseRepository;
-  @inject(Types.VariableExpenseRepository) private variableExpenseRepository!: IVariableExpenseRepository;
 
   public async execute({ data }: IRequest): Promise<IUserLoginResponse> {
     const user = await this.userRepository.findByEmail(data.email.toLowerCase());
@@ -50,8 +46,6 @@ class LoginService {
   
     // Ajustar para garantir que os resultados sejam sempre arrays
     const revenues = await this.revenueRepository.findAllByUserId(user.id);
-    const fixedExpenses = await this.fixedExpenseRepository.findAllByUserId(user.id);
-    const variableExpenses = await this.variableExpenseRepository.findAllByUserId(user.id);
   
     return {
       accessToken,
@@ -64,12 +58,9 @@ class LoginService {
         email: user.email,
         birthDate: user.birthDate,
         profession: user.profession,
-        salary: user.salary,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
         revenues: Array.isArray(revenues) ? revenues : revenues ? [revenues] : [], 
-        fixedExpenses: Array.isArray(fixedExpenses) ? fixedExpenses : fixedExpenses ? [fixedExpenses] : [], 
-        variableExpenses: Array.isArray(variableExpenses) ? variableExpenses : variableExpenses ? [variableExpenses] : [], 
       },
     };
   }
