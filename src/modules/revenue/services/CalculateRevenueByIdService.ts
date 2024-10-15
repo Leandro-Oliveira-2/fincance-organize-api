@@ -20,8 +20,7 @@ export class CalculateRevenueByIdService {
 
       // Retorna o total calculado
       return {
-        message: "Total revenue calculated successfully",
-        totalRevenue, // Retorna o total de receita
+        total: totalRevenue
       };
     } catch (error: any) {
       console.error("Error calculating total revenue:", error.message);

@@ -16,4 +16,7 @@ export interface IFinanceRepository {
     }>;
     getUserExpensesByDate(userId: number, year: number, month?: number, day?: number): Promise<{ user: User | null, fixedExpenses: FixedExpense[], variableExpenses: VariableExpense[] }>;
     getUserExpensesByPeriod(userId: number, startDate: Date, endDate: Date): Promise<{ user: User | null, fixedExpenses: FixedExpense[], variableExpenses: VariableExpense[] }>;
+    calculatePreviousBalance(userId: number, month: number, year: number): Promise<number>
+    calculateCurrentBalance(userId: number, month: number, year: number): Promise<number>
+    projectExpensesForYear(userId: number,monthsToProject: number): Promise<{projectedFixed: number[], projectedVariable: number[], projectedTotal: number[]}>
 }

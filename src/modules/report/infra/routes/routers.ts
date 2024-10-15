@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify";
 import container from "@/common/container";
 import Types from "@/common/container/types";
-import { FinanceController } from "../controllers/FincanceController";
+import { FinanceController } from "../controllers/ReportController";
 
 export async function routerFiance(app: FastifyInstance) {
   const financeController = container.get<FinanceController>(Types.FinanceController);

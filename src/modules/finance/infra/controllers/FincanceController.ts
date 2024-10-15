@@ -4,6 +4,7 @@ import { GetExpensesByPeriodService } from "../../services/GetExpensesByPeriodSe
 import { GetUserExpensesByDateService } from "../../services/GetUserExpensesByDateService";
 import { GetUserExpensesService } from "../../services/GetUserExpensesService";
 import { CalculateExpensesService } from "../../services/CalculateExpensesService";
+import { ExpenseProjectionsService } from "../../services/ExpenseProjectionsService";
 
 @injectable()
 export class FinanceController {
@@ -35,6 +36,25 @@ export class FinanceController {
             });
         }
     }
+
+    async projectExpenses(request: FastifyRequest, reply: FastifyReply): Promise<Response> {
+        const data:any = request.body;
+        const {userId, year} = data;
+        const expenseProjectionsService = AppContainer.resolve<ExpenseProjectionsService>(ExpenseProjectionsService);
+        try {
+          const projections = await expenseProjectionsService.execute({ userId, year });
+          return reply.status(200).send({
+            status: 'success',
+            data: projections,
+        });
+        } catch (error) {
+            console.error('Error projection expenses:', error);
+            return reply.status(500).send({
+                status: 'error',
+                message: error instanceof Error ? error.message : "Unexpected error occurred",
+            });
+        }
+      }
 
 
     async getExpensesByPeriod(request: FastifyRequest<{ Body: { userId: string; startDate: string; endDate: string; } }>, reply: FastifyReply): Promise<FastifyReply> {

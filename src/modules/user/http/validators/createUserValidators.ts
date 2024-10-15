@@ -6,5 +6,6 @@ export const userSchema = Z.object({
   name: Z.string().min(1, "O nome é obrigatório"),
   birthDate: Z.string().transform((str) => new Date(str)),
   profession: Z.string().optional(),
+  gender: Z.string().optional(),
   createdAt: Z.string().transform((str) => new Date(str)).optional(),
 });

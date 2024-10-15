@@ -34,11 +34,16 @@ export class GetUserExpensesByDateService {
                 description: expense.description,
                 amount: expense.amount,
                 createdAt: expense.createdAt,
+                isPaid: expense.isPaid,
+                category: expense.category,
             })),
             variableExpenses: data.variableExpenses.map(expense => ({
                 description: expense.description,
                 amount: expense.amount,
                 createdAt: expense.createdAt,
+                paymentMethod: expense.paymentMethod ?? '',
+                isPaid: expense.isPaid,
+                category: expense.category,
             })),
         };
 

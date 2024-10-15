@@ -13,10 +13,7 @@ export class ListUserService {
     try {
       const users = await this.userRepository.getUsers();
 
-      return {
-        message: "Users retrieved successfully",
-        data: users,
-      };
+      return users;
     } catch (error: any) {
       console.error("Error retrieving users:", error.message);
 

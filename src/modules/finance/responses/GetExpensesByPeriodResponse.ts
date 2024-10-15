@@ -11,10 +11,16 @@ export interface IResponse {
         description: string;
         amount: number;
         createdAt: Date;
+        dueDate?: string;
+        isPaid: boolean;
+        category?: string;
     }[];
     variableExpenses: {
         description: string;
         amount: number;
         createdAt: Date;
+        paymentMethod: string;
+        isPaid: boolean;
+        category?: string;
     }[];
 }

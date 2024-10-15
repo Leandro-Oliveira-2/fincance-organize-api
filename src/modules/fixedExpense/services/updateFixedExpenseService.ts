@@ -22,28 +22,26 @@ export class UpdateFixedExpenseService {
       // Validação dos dados de entrada
       const parsedData = fixedExpenseSchema.safeParse(data);
       if (!parsedData.success) {
-        console.log(`Validation failed for fixed expense with ID: ${id}`);
+        console.error(`Validation errors:`, parsedData.error.errors); // Log detalhado de erros de validação
         throw new ValidationError("Invalid data format", parsedData.error.errors);
       }
 
       // Verificar se a despesa fixa existe
-      console.log(`Checking existence of fixed expense with ID: ${id}`);
       const fixedExpense = await this.fixedExpenseRepository.findById(id);
 
       if (!fixedExpense) {
-        console.log(`Fixed expense with ID: ${id} does not exist`);
         throw new FixedExpenseDoesNotExist("Fixed expense does not exist");
       }
 
-      // Preparar os dados para atualização
+      // Preparar os dados para atualização (somente campos que estão no esquema)
       const updateData = {
         description: data.description,
         amount: data.amount,
         month: data.month,
+        category: data.category,
         year: data.year,
       };
 
-      console.log(`Updating fixed expense with ID: ${id}`);
       const updatedFixedExpense = await this.fixedExpenseRepository.updateFixedExpense(id, updateData);
 
       // Retorno de sucesso padronizado
@@ -53,8 +51,8 @@ export class UpdateFixedExpenseService {
       };
       
     } catch (error: any) {
-      // Log do erro
-      console.error(`Error updating fixed expense with ID: ${id}:`, error.message);
+      // Log do erro com detalhes e stack trace
+      console.error(`Error updating fixed expense with ID: ${id}:`, error.message, error.stack);
 
       // Tratamento de erros conhecidos
       if (error instanceof ValidationError || error instanceof FixedExpenseDoesNotExist) {

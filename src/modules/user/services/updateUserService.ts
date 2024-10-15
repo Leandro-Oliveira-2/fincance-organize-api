@@ -45,10 +45,7 @@ export class UpdateUserService {
       const updatedUser = await this.userRepository.updateUser(id, updateData);
 
       // Retorna o usuário atualizado
-      return {
-        message: "User updated successfully",
-        user: updatedUser,
-      };
+      return updatedUser;
     } catch (error: any) {
       console.error("Error updating user:", error.message);
 
