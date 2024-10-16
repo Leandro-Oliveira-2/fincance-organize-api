@@ -4,10 +4,9 @@ import z from 'zod'
 const envSchema = z.object({
   NODE_ENV: z.enum(['dev', 'homolog', 'production']).default('dev'),
   PORT: z.coerce.number().default(3333),
-  DATABASE_URL: z.string(),
+  DATABASE_URL: z.string().default("postgresql://postgres:drVoXSqIafSixqWqhNJClrefMMfxhJwJ@junction.proxy.rlwy.net:21618/railway"),
   ENDPOINT: z.string(),
 })
-
 const _env = envSchema.safeParse(process.env)
 
 if (_env.success === false) {

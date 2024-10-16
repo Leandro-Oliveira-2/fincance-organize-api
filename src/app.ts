@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import fastify from 'fastify';
+import fastify from "fastify";
 import cors from "@fastify/cors";
 import formbody from "@fastify/formbody"; // Adicione esta linha
 import { env } from "process";
