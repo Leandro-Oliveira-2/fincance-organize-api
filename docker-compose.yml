@@ -9,11 +9,12 @@ services:
       - .:/app
     environment:
       - DATABASE_TYPE=postgres
-      - DATABASE_HOST=<REMOTE_DB_HOST>       # Coloque aqui o host do seu banco remoto, ex: "containers-us-west-123.railway.app"
-      - DATABASE_USER=<REMOTE_DB_USER>       # O usuário do banco remoto
-      - DATABASE_PASSWORD=<REMOTE_DB_PASSWORD>  # A senha do banco remoto
-      - DATABASE_DATABASE=<REMOTE_DB_NAME>   # O nome do banco de dados
-      - DATABASE_PORT=<REMOTE_DB_PORT>       # A porta do banco remoto, geralmente 5432
+      - DATABASE_URL=postgresql://postgres:drVoXSqIafSixqWqhNJClrefMMfxhJwJ@junction.proxy.rlwy.net:21618/railway
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=drVoXSqIafSixqWqhNJClrefMMfxhJwJ
+      - DATABASE_HOST=postgres.railway.internal
+      - DATABASE_PORT=5432
+      - DATABASE_DATABASE=railway
       - DATABASE_LOGGING=false
       - DATABASE_SSL=true
       - PORT=3000
