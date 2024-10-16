@@ -1,14 +1,21 @@
-import { env } from '@/env';
+import 'module-alias/register';
+import { env } from './env/index';
 import { app } from './app';
-import chalk from 'chalk';
 import figlet from 'figlet';
+import prisma from './common/infra/prisma/index'; // Importação do Prisma
 
-const title = chalk.cyan(figlet.textSync('FinanceOrganizer', { horizontalLayout: 'full' }));
-const info = chalk.yellow(`Service running at port ${env.PORT}.`);
+async function startApp() {
+  const chalk = (await import('chalk')).default;  // Importação dinâmica
 
-app
-  .listen({
+
+  const title = chalk.cyan(figlet.textSync('FinanceOrganizer', { horizontalLayout: 'full' }));
+  const info = chalk.yellow(`Service running at port ${env.PORT}.`);
+  await prisma.$connect();
+  app.listen({
     host: '0.0.0.0',
     port: env.PORT,
   })
   .then(() => console.log(title, '\n', info));
+}
+
+startApp();

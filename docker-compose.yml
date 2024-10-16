@@ -7,25 +7,15 @@ services:
       - "3000:3000"
     volumes:
       - .:/app
-    depends_on:
-      - db
     environment:
       - DATABASE_TYPE=postgres
-      - DATABASE_HOST=db
+      - DATABASE_URL=postgresql://postgres:drVoXSqIafSixqWqhNJClrefMMfxhJwJ@junction.proxy.rlwy.net:21618/railway
       - DATABASE_USER=postgres
-      - DATABASE_PASSWORD=124578pz
-      - DATABASE_DATABASE=railway
+      - DATABASE_PASSWORD=drVoXSqIafSixqWqhNJClrefMMfxhJwJ
+      - DATABASE_HOST=postgres.railway.internal
       - DATABASE_PORT=5432
+      - DATABASE_DATABASE=railway
       - DATABASE_LOGGING=false
       - DATABASE_SSL=true
       - PORT=3000
     command: npm run start
-
-  db:
-    image: postgres:latest
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 124578pz
-      POSTGRES_DB: railway
-    ports:
-      - "5432:5432"
