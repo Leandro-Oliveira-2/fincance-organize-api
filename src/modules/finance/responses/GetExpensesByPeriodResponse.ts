@@ -8,14 +8,17 @@ export interface IResponse {
         updatedAt: Date;
     };
     fixedExpenses: {
+        id: number;
         description: string;
         amount: number;
         createdAt: Date;
         dueDate?: string;
         isPaid: boolean;
         category?: string;
+        isFixed: boolean;
     }[];
     variableExpenses: {
+        id: number;
         description: string;
         amount: number;
         createdAt: Date;
