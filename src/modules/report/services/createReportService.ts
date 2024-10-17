@@ -11,10 +11,8 @@ export class RelatorioService {
     @inject(Types.FinanceRepository) private financeRepository!: IFinanceRepository;
 
     async generateReport(userId: number, startDate: Date, endDate: Date): Promise<string> {
-        // Obter as despesas e receitas no período
         const expenses = await this.financeRepository.getUserExpensesByPeriod(userId, startDate, endDate);
-        console.log('Expenses:', expenses);
-
+        
         // Caminho onde o PDF será salvo no servidor
         const fileName = `relatorio_${moment().format('YYYY-MM-DD_HH-mm-ss')}.pdf`;
         const reportsDir = path.join(__dirname, '..', 'generated_reports');
@@ -30,12 +28,9 @@ export class RelatorioService {
         const writeStream = fs.createWriteStream(filePath);
         doc.pipe(writeStream);
 
-        // Adicionar uma frase simples ao PDF para teste
-        doc.fontSize(25).text('Relatório de Despesas e Receitas', {
-            align: 'center',
-        });
+        // Conteúdo do PDF
+        doc.fontSize(25).text('Relatório de Despesas e Receitas', { align: 'center' });
 
-        // Adicionar Receitas
         doc.moveDown().fontSize(16).text('Receitas:', { underline: true });
         if (expenses.revenues.length > 0) {
             expenses.revenues.forEach(receita => {
@@ -45,7 +40,6 @@ export class RelatorioService {
             doc.fontSize(12).text('Nenhuma receita registrada.');
         }
 
-        // Adicionar Despesas Fixas
         doc.moveDown().fontSize(16).text('Despesas Fixas:', { underline: true });
         if (expenses.fixedExpenses.length > 0) {
             expenses.fixedExpenses.forEach(despesaFixa => {
@@ -55,7 +49,6 @@ export class RelatorioService {
             doc.fontSize(12).text('Nenhuma despesa fixa registrada.');
         }
 
-        // Adicionar Despesas Variáveis
         doc.moveDown().fontSize(16).text('Despesas Variáveis:', { underline: true });
         if (expenses.variableExpenses.length > 0) {
             expenses.variableExpenses.forEach(despesaVariavel => {
@@ -68,14 +61,14 @@ export class RelatorioService {
         // Finalizar o documento PDF
         doc.end();
 
-        // Aguardar a conclusão do stream de escrita antes de fechar
+        // Retorna o caminho do arquivo PDF salvo
         return new Promise<string>((resolve, reject) => {
             writeStream.on('finish', () => {
-                resolve(filePath); // Quando o stream terminar, retorne o caminho do arquivo
+                resolve(filePath); // Retorna o caminho do arquivo PDF salvo
             });
 
             writeStream.on('error', (error) => {
-                reject(error); // Se houver um erro, rejeite a promessa
+                reject(error);
             });
         });
     }

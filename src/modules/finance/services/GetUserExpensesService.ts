@@ -24,21 +24,24 @@ export class GetUserExpensesService {
                 createdAt: data.user.createdAt,
                 updatedAt: data.user.updatedAt,
             },
-            fixedExpenses: data.fixedExpenses.map((expense: FixedExpense) => ({
+            fixedExpenses: data.fixedExpenses.map(expense => ({
+                id: expense.id,
                 description: expense.description,
                 amount: expense.amount,
                 createdAt: expense.createdAt,
+                category: expense.category,
                 dueDate: expense.dueDate ? expense.dueDate.toISOString() : undefined,
                 isPaid: expense.isPaid,
-                category: expense.category,
+                isFixed: true
             })),
-            variableExpenses: data.variableExpenses.map((expense: VariableExpense) => ({
+            variableExpenses: data.variableExpenses.map(expense => ({
+                id: expense.id,
                 description: expense.description,
                 amount: expense.amount,
                 createdAt: expense.createdAt,
-                isPaid: expense.isPaid,
                 category: expense.category,
                 paymentMethod: expense.paymentMethod ?? '',
+                isPaid: expense.isPaid
             })),
         };
 
