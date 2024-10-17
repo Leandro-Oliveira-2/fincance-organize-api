@@ -1,7 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { injectable } from "inversify";
 import fs from 'fs';
-import path from 'path';
 import AppContainer from "@/common/container";
 import { RelatorioService } from "../../services/createReportService";
 
@@ -10,7 +9,7 @@ export class ReportController {
   async gerarRelatorio(
     req: FastifyRequest,
     reply: FastifyReply
-  ): Promise<FastifyReply> {
+  ): Promise<void> {
     const relatorioService = AppContainer.resolve<RelatorioService>(RelatorioService);
 
     try {
@@ -40,8 +39,19 @@ export class ReportController {
         `attachment; filename=relatorio_${new Date().toISOString()}.pdf`
       );
 
-      // 3. Enviar o arquivo PDF como um stream de resposta
-      return reply.send(fileStream); // enviar o stream do arquivo PDF
+      // 3. Ouvir o evento de finalização da resposta para deletar o arquivo
+      reply.raw.on('finish', () => {
+        fs.unlink(filePath, (err) => {
+          if (err) {
+            console.error("Erro ao deletar o arquivo PDF:", err);
+          } else {
+            console.log(`Arquivo PDF ${filePath} deletado com sucesso.`);
+          }
+        });
+      });
+
+      // Enviar o arquivo PDF como um stream de resposta
+      return reply.send(fileStream);
     } catch (error) {
       console.error("Erro ao gerar o relatório:", error);
       return reply.status(500).send({ error: "Erro ao gerar o relatório" });
