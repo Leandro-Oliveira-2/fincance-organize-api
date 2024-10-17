@@ -22,11 +22,14 @@ export class UserController {
       // Executa o serviço de criação de usuário
       const response = await createService.execute({ data: user });
       return reply.status(201).send({ message: "Successfully created User", data: response });
-    } catch (err) {
+    } catch (err:any) {
       if (err instanceof ZodError) {
         return reply.status(400).send({ message: "Validation error", issues: err.errors });
       }
 
+      if (err.message.includes("email já está em uso")) {
+        return reply.status(409).send({ message: "Email já está em uso." }); // 409 para conflitos
+      }
       // Log de erro e retorno de mensagem de erro genérico
       console.error("Error in create user:", (err as Error).message);
       return reply.status(500).send({ message: "An error occurred while creating the user" });

@@ -15,6 +15,12 @@ export class CreateUserService {
 
   public async execute({ data }: IRequest) {
     try {
+      const existingUser = await this.userRepository.findByEmail(data.email.toLowerCase());
+
+      if (existingUser) {
+        throw new Error("Este email já está em uso.");
+      }
+      
       const user = {
         email: data.email.toLowerCase(),
         name: data.name,
