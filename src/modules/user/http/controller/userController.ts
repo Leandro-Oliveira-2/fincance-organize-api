@@ -13,23 +13,31 @@ import AppContainer from "@/common/container";
 export class UserController {
 
   async create(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
-
     const createService = AppContainer.resolve<CreateUserService>(CreateUserService);
+
     try {
-      // Valida os dados do usuário usando Zod
       const user = userSchema.parse(request.body);
 
-      // Executa o serviço de criação de usuário
       const response = await createService.execute({ data: user });
       return reply.status(201).send({ message: "Successfully created User", data: response });
-    } catch (err) {
+    } catch (err: any) {
       if (err instanceof ZodError) {
         return reply.status(400).send({ message: "Validation error", issues: err.errors });
       }
 
-      // Log de erro e retorno de mensagem de erro genérico
-      console.error("Error in create user:", (err as Error).message);
-      return reply.status(500).send({ message: "An error occurred while creating the user" });
+      // Log completo do erro com mais detalhes
+      console.error("Erro no controlador ao criar usuário:", JSON.stringify(err, null, 2));
+
+      // Verifica se o erro é de e-mail duplicado ou outro erro específico do Prisma
+      if (err.code === "P2002" && err.meta?.target?.includes("email")) {
+        return reply.status(409).send({ message: "Email já está em uso." });
+      }
+
+      // Retorna os detalhes do erro no caso de outro erro genérico
+      return reply.status(500).send({
+        message: "An error occurred while creating the user",
+        details: err.message || "Detalhes não disponíveis",  // Mostra mais detalhes sobre o erro
+      });
     }
   }
 
