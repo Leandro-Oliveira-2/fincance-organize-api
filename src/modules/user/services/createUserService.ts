@@ -4,6 +4,8 @@ import Types from "@/common/container/types";
 import * as Z from "zod";
 import { userSchema } from "../http/validators/createUserValidators";
 import argon2 from "argon2";
+import AppError from "@/common/errors/AppError";
+import { StatusCodes } from "http-status-codes";
 
 interface IRequest {
   data: Z.infer<typeof userSchema>;
@@ -18,9 +20,9 @@ export class CreateUserService {
       const existingUser = await this.userRepository.findByEmail(data.email.toLowerCase());
 
       if (existingUser) {
-        throw new Error("Este email já está em uso.");
+        throw new AppError('Email já cadastrado', StatusCodes.CONFLICT); // Adiciona ponto e vírgula
       }
-      
+
       const user = {
         email: data.email.toLowerCase(),
         name: data.name,
@@ -33,10 +35,10 @@ export class CreateUserService {
 
       const newUser = await this.userRepository.create(user);
 
-      return newUser;
-    } catch (error) {
-      console.error("Erro ao criar usuário:", error);
-      throw new Error("Ocorreu um erro ao criar o usuário.");
+      return newUser; // Ponto e vírgula adicionado
+    } catch (err: any) {
+      // Melhorando a exibição do erro
+      throw new AppError('Erro ao criar usuário: ' + err.message, StatusCodes.INTERNAL_SERVER_ERROR);
     }
   }
 }
