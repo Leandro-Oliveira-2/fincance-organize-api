@@ -9,4 +9,5 @@ export async function routerFixedExpense(app: FastifyInstance) {
   app.post("/create", fixedExpenseController.create.bind(fixedExpenseController));
   app.patch("/update", fixedExpenseController.update.bind(fixedExpenseController));
   app.get("/list", fixedExpenseController.list.bind(fixedExpenseController));
+  app.post("/delete", fixedExpenseController.delete.bind(fixedExpenseController));
 }

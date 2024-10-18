@@ -8,6 +8,7 @@ import { ListVariableExpenseService } from "@/modules/variableExpense/services/l
 import { UpdateVariableExpenseService } from "@/modules/variableExpense/services/updateVariableExpensive";
 import { NotFoundError } from "@/common/errors/NotFoundError"; 
 import { VariableExpensiveDoesNotExist } from "@/modules/variableExpense/errors/VariableExpensiveDoesNotExist";
+import { DeleteVariableExpenseService } from "@/modules/variableExpense/services/deleteVariableExpenseService";
 
 @injectable()
 export class VariableExpenseController {
@@ -54,6 +55,23 @@ export class VariableExpenseController {
       return reply.status(200).send({ message: "Successfully Updated Variable Expense" });
     } catch (error) {
       console.log("Erro no controlador:", error); 
+      if (error instanceof VariableExpensiveDoesNotExist) {
+        return reply.status(404).send({ message: error.message });
+      }
+      return reply.status(500).send({ message: "Internal Server Error" });
+    }
+  }
+
+
+  async delete(request: FastifyRequest, reply: FastifyReply) {
+    const deleteService = AppContainer.resolve<DeleteVariableExpenseService>(DeleteVariableExpenseService);
+
+    try {
+      const body:any = request.body;
+      const { id } = body;
+      const response = await deleteService.execute({ id });
+      return reply.status(200).send({ message: "Variable Expense deleted successfully", data: response });
+    }catch (error) {
       if (error instanceof VariableExpensiveDoesNotExist) {
         return reply.status(404).send({ message: error.message });
       }

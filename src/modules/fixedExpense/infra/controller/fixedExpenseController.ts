@@ -8,6 +8,7 @@ import { CreateFixedExpenseService } from "../../services/createFixedExpenseServ
 import { UpdateFixedExpenseService } from "../../services/updateFixedExpenseService";
 import { FixedExpenseDoesNotExist } from "../../errors/FixedExpenseDoesNotExist";
 import { ListFixedExpenseService } from "../../services/listFixedExpenseService";
+import { DeleteFixedExpenseService } from "../../services/deleteFixedExpenseService";
 
 @injectable()
 export class FixedExpenseController {
@@ -63,4 +64,19 @@ async create(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply
     }
   }
 
+  async delete(request: FastifyRequest, reply: FastifyReply) {
+    const deleteService = AppContainer.resolve<DeleteFixedExpenseService>(DeleteFixedExpenseService);
+
+    try {
+      const body:any = request.body;
+      const { id } = body;
+      const response = await deleteService.execute({ id });
+      return reply.status(200).send({ message: "Fixed Expense deleted successfully", data: response });
+    }catch (error) {
+      if (error instanceof FixedExpenseDoesNotExist) {
+        return reply.status(404).send({ message: error.message });
+      }
+      return reply.status(500).send({ message: "Internal Server Error" });
+    }
+  }
 }
