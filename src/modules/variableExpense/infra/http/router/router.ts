@@ -9,4 +9,5 @@ export async function routerVariableExpense(app: FastifyInstance) {
   app.post("/create", variableExpense.create.bind(variableExpense));
   app.get("/list", variableExpense.list.bind(variableExpense));
   app.patch("/update", variableExpense.update.bind(variableExpense));
+  app.post("/delete", variableExpense.delete.bind(variableExpense));
 }
